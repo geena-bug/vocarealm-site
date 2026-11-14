@@ -5,7 +5,7 @@ import ConversationPlayer from './ConversationPlayer.jsx';
 import { a1Realms, hotelDialogues, realmsFor } from './data.js';
 import { emptyProgress, exercise, logAttempt, newSession, rememberMissed, reviewSession, starterQuestion } from './lesson.js';
 import { PackResults, Question, Setup, StarterResults } from './Lesson.jsx';
-import { Home, Profile, Progress } from './screens.jsx';
+import { Home, Lines, Profile, Progress } from './screens.jsx';
 
 const NAV = [
   ['Home', '⌂'],
@@ -408,7 +408,8 @@ export default function HotelApp({ account, store, levelState }) {
           <div className="stats">
             <span className="pill">🇫🇷 French</span>
             <span className="pill" id="xp">
-              ✦ {data.current.xp} XP
+              <Lines size="sm" />
+              {data.current.xp} XP
             </span>
           </div>
         </header>
