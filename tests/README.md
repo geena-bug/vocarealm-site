@@ -1,0 +1,24 @@
+# Verification
+
+Run `node --test tests/*.test.cjs` from the repository root.
+
+The placement suite checks the 5/6 boundaries at every level, early stopping, upper-bound behavior at C2, persisted-answer validation, skipped items and content structure. These tests verify implementation rules; they do not validate the test as a psychometric or CEFR assessment.
+
+The bank is original draft learning content. Placement uses 6 questions per stage and offers the next stage after 5 correct answers. The first stage below threshold is the recommended starting point. Passing C2 still recommends C2 practice, never a certificate. A learner may finish after any passed stage and select the next level, which is explicitly marked as unassessed in the score table.
+
+Levels A2–C2 have short starter reading practice, not full courses. Placement and selected-level records are scoped to the signed-in user or guest in browser localStorage. There is no cloud score sync or official certification. Speaking, listening, extended writing and human moderation are not included. Advanced curricula and assessment validation remain future work.
+
+Browser-based visual and device QA is not available in this environment. Script/link validation and functional tests do not replace that review.
+
+## Test commands
+
+| Command | What it checks | Needs |
+| --- | --- | --- |
+| `npm test` | Builds the site, then runs module logic tests (including the React pages' account, translation and lesson modules) plus whole-site checks on the built `dist/` in `site-integrity.test.cjs`: every page's links, scripts and images exist; scripts load in dependency order; JS/JSON parse; course source matches `dist/realm-courses.js`; the catalogue has 20 realms; no server secrets in browser code; no hard-coded site domain; Vercel config; the local server's content types and path safety. | `npm install` once |
+| `npm run test:e2e` | Builds the site, then drives real Chromium at desktop and phone size against it (`e2e/site.spec.cjs`): every page loads with no script errors, broken images or sideways scrolling; landing navigation; demo; realm search/filter; a typed café conversation; Hotel app navigation and audio module; the React vocabulary page (translate in both directions, edit, save, remove, listen, translate-later list, practice quiz); level choice persistence; placement resume; level practice; signup/login validation and messages. | `npm install` once |
+| `npm run test:live` | The same browser tests against https://vocarealm.vercel.app (set `BASE_URL` for another domain). | `npm install` once |
+| `npm run test:all` | `npm test` then `npm run test:e2e`. | |
+
+Browser tests never contact the real Supabase project: Auth and the pronunciation function are answered with canned responses in `e2e/fixtures.cjs`, so no accounts are created and no email is sent. Failure screenshots and traces go to `e2e-results/`; an HTML report goes to `e2e-report/` (`npx playwright show-report e2e-report`).
+
+Still manual: real speech output and microphone recording, Supabase email delivery and confirmation/reset links, logged-in vocabulary sync, and pronunciation scoring once Azure is configured.

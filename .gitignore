@@ -1,0 +1,8 @@
+.vercel
+.env*
+node_modules
+e2e-results
+e2e-report
+dist
+.idea
+.DS_Store

@@ -1,0 +1,317 @@
+[
+  {
+    "id": "hotel",
+    "name": "Hotel",
+    "category": "Travel",
+    "description": "Check in, book a room and ask for help.",
+    "image": "hotel-conversation",
+    "status": "full",
+    "sample": null
+  },
+  {
+    "id": "cafe",
+    "name": "Café",
+    "category": "Everyday",
+    "description": "Order food and drinks with confidence.",
+    "image": "cafe-scene",
+    "status": "full",
+    "sample": null
+  },
+  {
+    "id": "school",
+    "name": "School",
+    "category": "Everyday",
+    "description": "Ask questions and join classroom life.",
+    "image": "school-scene",
+    "status": "full",
+    "sample": null
+  },
+  {
+    "id": "transport",
+    "name": "Transport",
+    "category": "Travel",
+    "description": "Buy tickets and navigate your journey.",
+    "image": "transport-scene",
+    "status": "full",
+    "sample": null
+  },
+  {
+    "id": "life",
+    "name": "Everyday Life",
+    "category": "Everyday",
+    "description": "Handle everyday errands and requests.",
+    "image": "life-scene",
+    "status": "full",
+    "sample": null
+  },
+  {
+    "id": "shopping",
+    "name": "Shopping",
+    "category": "Everyday",
+    "description": "Choose clothes, ask prices and pay.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Je voudrais essayer cette veste.",
+      "I would like to try on this jacket.",
+      "une taille",
+      "a size",
+      "le prix",
+      "the price",
+      "une cabine",
+      "a fitting room"
+    ]
+  },
+  {
+    "id": "directions",
+    "name": "Directions",
+    "category": "Travel",
+    "description": "Ask for a place and explain the route.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Excusez-moi, où est la bibliothèque ?",
+      "Excuse me, where is the library?",
+      "tout droit",
+      "straight ahead",
+      "à gauche",
+      "to the left",
+      "à droite",
+      "to the right"
+    ]
+  },
+  {
+    "id": "news",
+    "name": "News articles",
+    "category": "Media",
+    "description": "Read a short report and identify its main idea.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "La bibliothèque ouvre un nouvel espace pour les enfants samedi.",
+      "The library is opening a new space for children on Saturday.",
+      "un article",
+      "an article",
+      "un titre",
+      "a headline",
+      "une information",
+      "a piece of information"
+    ]
+  },
+  {
+    "id": "adverts",
+    "name": "Adverts",
+    "category": "Media",
+    "description": "Understand offers, notices and announcements.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Cours de français le samedi. Inscription gratuite !",
+      "French classes on Saturdays. Free registration!",
+      "une offre",
+      "an offer",
+      "gratuit",
+      "free of charge",
+      "une annonce",
+      "an advertisement"
+    ]
+  },
+  {
+    "id": "interview",
+    "name": "Interview",
+    "category": "Work",
+    "description": "Introduce yourself and describe your experience.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Je suis une personne organisée et j’aime travailler en équipe.",
+      "I am an organized person and I like working in a team.",
+      "un entretien",
+      "an interview",
+      "une expérience",
+      "an experience",
+      "une équipe",
+      "a team"
+    ]
+  },
+  {
+    "id": "friends",
+    "name": "Arguments between friends",
+    "category": "Social",
+    "description": "Disagree respectfully and work things out.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Je comprends, mais je ne suis pas d’accord.",
+      "I understand, but I disagree.",
+      "un avis",
+      "an opinion",
+      "désolé",
+      "sorry",
+      "discuter",
+      "to discuss"
+    ]
+  },
+  {
+    "id": "party",
+    "name": "Party scene",
+    "category": "Celebrations",
+    "description": "Meet people, chat and enjoy a gathering.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Salut ! Comment connais-tu notre hôte ?",
+      "Hi! How do you know our host?",
+      "une fête",
+      "a party",
+      "un invité",
+      "a guest",
+      "la musique",
+      "music"
+    ]
+  },
+  {
+    "id": "park",
+    "name": "Playing in the park",
+    "category": "Social",
+    "description": "Talk about games, play and outdoor activities.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "On joue au ballon ensemble ?",
+      "Shall we play ball together?",
+      "un parc",
+      "a park",
+      "un ballon",
+      "a ball",
+      "jouer",
+      "to play"
+    ]
+  },
+  {
+    "id": "picnic",
+    "name": "Picnic",
+    "category": "Social",
+    "description": "Plan what to bring and share a meal outdoors.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Je peux apporter des fruits et de l’eau.",
+      "I can bring fruit and water.",
+      "un panier",
+      "a basket",
+      "une couverture",
+      "a blanket",
+      "partager",
+      "to share"
+    ]
+  },
+  {
+    "id": "business",
+    "name": "Corporate business",
+    "category": "Work",
+    "description": "Join meetings and discuss plans professionally.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Pouvons-nous fixer une réunion pour lundi ?",
+      "Can we schedule a meeting for Monday?",
+      "une réunion",
+      "a meeting",
+      "un projet",
+      "a project",
+      "un délai",
+      "a deadline"
+    ]
+  },
+  {
+    "id": "service",
+    "name": "Customer service",
+    "category": "Work",
+    "description": "Explain an issue and help find a solution.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Bonjour, j’ai un problème avec ma commande.",
+      "Hello, I have a problem with my order.",
+      "une commande",
+      "an order",
+      "un remboursement",
+      "a refund",
+      "une solution",
+      "a solution"
+    ]
+  },
+  {
+    "id": "registration",
+    "name": "Registration",
+    "category": "Everyday",
+    "description": "Complete forms and ask about requirements.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Quels documents faut-il pour s’inscrire ?",
+      "What documents are needed to register?",
+      "un formulaire",
+      "a form",
+      "une adresse",
+      "an address",
+      "une signature",
+      "a signature"
+    ]
+  },
+  {
+    "id": "wedding",
+    "name": "Wedding",
+    "category": "Celebrations",
+    "description": "Congratulate the couple and join the celebration.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Toutes mes félicitations pour votre mariage !",
+      "Congratulations on your wedding!",
+      "un mariage",
+      "a wedding",
+      "les mariés",
+      "the newlyweds",
+      "une cérémonie",
+      "a ceremony"
+    ]
+  },
+  {
+    "id": "birthday",
+    "name": "Birthday party",
+    "category": "Celebrations",
+    "description": "Give birthday wishes and talk about the party.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Joyeux anniversaire ! Voici un petit cadeau pour toi.",
+      "Happy birthday! Here is a small present for you.",
+      "un gâteau",
+      "a cake",
+      "un cadeau",
+      "a present",
+      "une bougie",
+      "a candle"
+    ]
+  },
+  {
+    "id": "invitation",
+    "name": "Invitation",
+    "category": "Social",
+    "description": "Invite someone, accept or politely decline.",
+    "image": null,
+    "status": "starter",
+    "sample": [
+      "Veux-tu venir dîner chez moi samedi ?",
+      "Would you like to come to my home for dinner on Saturday?",
+      "inviter",
+      "to invite",
+      "accepter",
+      "to accept",
+      "disponible",
+      "available"
+    ]
+  }
+]

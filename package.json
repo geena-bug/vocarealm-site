@@ -1,0 +1,27 @@
+{
+  "name": "vocarealm-source",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VocaRealm Sites source export, published version 20",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "npm run build && node scripts/serve.mjs",
+    "test": "vite build --logLevel warn && node --test tests/*.test.cjs",
+    "test:e2e": "playwright test --config playwright.config.cjs",
+    "test:all": "npm test && npm run test:e2e",
+    "test:live": "BASE_URL=https://vocarealm.vercel.app playwright test --config playwright.config.cjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.54.2",
+    "@vitejs/plugin-react": "6.1.2",
+    "vite": "8.3.3"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}
