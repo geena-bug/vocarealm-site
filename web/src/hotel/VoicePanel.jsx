@@ -1,6 +1,12 @@
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
 
-const normalize = (t) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+const normalize = (t) =>
+  t
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
 
 const RECOGNITION_ERRORS = {
   'not-allowed': 'Microphone access was blocked. Allow it in browser settings, then retry.',
@@ -59,7 +65,11 @@ export default function VoicePanel({ target, listen, registerStatus }) {
       const heard = e.results[0][0].transcript;
       const match = Array.from(e.results[0]).some((a) => normalize(a.transcript) === normalize(target));
       setStatus(
-        'Heard: “' + heard + '”. ' + (match ? '✓ The recognised words match the phrase.' : 'Compare this transcript with the phrase above, listen again, then retry.') + ' This is a word match, not a pronunciation score.',
+        'Heard: “' +
+          heard +
+          '”. ' +
+          (match ? '✓ The recognised words match the phrase.' : 'Compare this transcript with the phrase above, listen again, then retry.') +
+          ' This is a word match, not a pronunciation score.',
       );
     };
     r.onerror = (e) => setStatus(RECOGNITION_ERRORS[e.error] || 'Speech recognition failed: ' + e.error);
@@ -111,13 +121,19 @@ export default function VoicePanel({ target, listen, registerStatus }) {
     <section className="voicebox">
       <b>Listen & speak</b>
       <p id="speakTarget">{target}</p>
-      <button className="secondary" onClick={() => listen(target)}>▶ Listen</button>
-      <button className="secondary" onClick={speakPractice}>🎙 Speak this phrase</button>
+      <button className="secondary" onClick={() => listen(target)}>
+        ▶ Listen
+      </button>
+      <button className="secondary" onClick={speakPractice}>
+        🎙 Speak this phrase
+      </button>
       <button className={'secondary' + (recording ? ' recording' : '')} id="recordButton" onClick={toggleRecording}>
         {recording ? '■ Stop recording' : clip ? 'Record again' : 'Record & replay'}
       </button>
       <p>Allow microphone access when asked. Recognition may send audio to your browser’s speech service. Recording stays on this page.</p>
-      <div id="voiceStatus" role="status" aria-live="polite" className="status">{status}</div>
+      <div id="voiceStatus" role="status" aria-live="polite" className="status">
+        {status}
+      </div>
       <div id="recordPlayback">
         {clip && (
           <>

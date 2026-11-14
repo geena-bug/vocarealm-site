@@ -30,8 +30,12 @@ function PathwayPanel() {
       <h2>Your French pathway · A1 to C2</h2>
       <p className="muted">Already know some French? Find a starting level without repeating every beginner lesson.</p>
       <div className="row">
-        <a href="levels.html" className="secondary" style={linkButton}>Choose my level →</a>
-        <a href="placement.html" className="secondary" style={linkButton}>Take placement check →</a>
+        <a href="levels.html" className="secondary" style={linkButton}>
+          Choose my level →
+        </a>
+        <a href="placement.html" className="secondary" style={linkButton}>
+          Take placement check →
+        </a>
       </div>
     </section>
   );
@@ -53,7 +57,9 @@ function ReviewPanel({ app }) {
   return (
     <section className="panel">
       <h2>Review your conversations</h2>
-      <button className="secondary" onClick={app.openReview}>Hotel conversation review</button>
+      <button className="secondary" onClick={app.openReview}>
+        Hotel conversation review
+      </button>
     </section>
   );
 }
@@ -104,7 +110,9 @@ export function Home({ app }) {
   return (
     <>
       <PathwayPanel />
-      {level === 'A2' && <p className="muted">A2 starter preview · These short lessons introduce the next stage. A1 offers larger, growing vocabulary packs.</p>}
+      {level === 'A2' && (
+        <p className="muted">A2 starter preview · These short lessons introduce the next stage. A1 offers larger, growing vocabulary packs.</p>
+      )}
       <div className="intro">
         <div>
           <div className="eyebrow">A WORLD OF WORDS AWAITS</div>
@@ -168,9 +176,15 @@ export function Progress({ app }) {
       <h1>Every word is a step forward.</h1>
       <p className="muted">Your practice on this browser.</p>
       <div className="row">
-        <div className="metric"><strong>{data.xp}</strong>XP earned</div>
-        <div className="metric"><strong>{data.sessions}</strong>Lessons completed</div>
-        <div className="metric"><strong>{realms.filter((r) => data.done[level + ':' + r.id]).length}/5</strong>Realms explored</div>
+        <div className="metric">
+          <strong>{data.xp}</strong>XP earned
+        </div>
+        <div className="metric">
+          <strong>{data.sessions}</strong>Lessons completed
+        </div>
+        <div className="metric">
+          <strong>{realms.filter((r) => data.done[level + ':' + r.id]).length}/5</strong>Realms explored
+        </div>
       </div>
       <div className="panel">
         <h2>Your realms</h2>
@@ -203,7 +217,9 @@ export function Progress({ app }) {
             <span>{stateLabel(data, w.id)}</span>
           </p>
         ))}
-        <button className="secondary" onClick={() => app.reviewRealm('hotel')}>Review introduced Hotel words</button>
+        <button className="secondary" onClick={() => app.reviewRealm('hotel')}>
+          Review introduced Hotel words
+        </button>
       </div>
       <div className="panel">
         <h2>Review another realm</h2>
@@ -211,7 +227,9 @@ export function Progress({ app }) {
         {app.a1Realms
           .filter((r) => r.id !== 'hotel')
           .map((r) => (
-            <button key={r.id} className="secondary" style={{ margin: 5 }} onClick={() => app.reviewRealm(r.id)}>{r.name}</button>
+            <button key={r.id} className="secondary" style={{ margin: 5 }} onClick={() => app.reviewRealm(r.id)}>
+              {r.name}
+            </button>
           ))}
       </div>
       <div className="panel">
@@ -253,7 +271,9 @@ function AudioSettings({ app }) {
       <select id="voiceChoice" value={app.voiceName || ''} onChange={(e) => app.setVoiceName(e.target.value)}>
         {voices.length ? (
           voices.map((v) => (
-            <option key={v.name} value={v.name}>{v.name} ({v.lang})</option>
+            <option key={v.name} value={v.name}>
+              {v.name} ({v.lang})
+            </option>
           ))
         ) : (
           <option value="">No French voice found — try the system default</option>
@@ -264,7 +284,9 @@ function AudioSettings({ app }) {
         <option value={0.82}>Slow</option>
         <option value={1}>Normal</option>
       </select>
-      <button className="primary" onClick={() => app.listen('Bonjour ! Bienvenue à VocaRealm.')}>Test French audio</button>
+      <button className="primary" onClick={() => app.listen('Bonjour ! Bienvenue à VocaRealm.')}>
+        Test French audio
+      </button>
       <p className="muted">If the device has no French voice, install one in its speech settings. The app cannot supply a recorded voice yet.</p>
     </div>
   );
@@ -281,10 +303,14 @@ export function Profile({ app }) {
         <h2>French for everyday life</h2>
         <p className="muted">Target language: French · Support language: English · Level: {levelName(level)}</p>
         <p>This first version includes guided conversations and browser text-to-speech. Progress is saved on this device.</p>
-        <button className="secondary" onClick={() => confirm('Reset all learning progress on this browser?') && app.resetProgress()}>Reset learning progress</button>
+        <button className="secondary" onClick={() => confirm('Reset all learning progress on this browser?') && app.resetProgress()}>
+          Reset learning progress
+        </button>
       </div>
       <VoicePanel target="Bonjour ! Je voudrais pratiquer le français." listen={app.listen} registerStatus={app.registerStatus} />
-      <p className="muted">These are VocaRealm practice stages, not a CEFR certification. Speech recognition checks the transcript, not pronunciation quality.</p>
+      <p className="muted">
+        These are VocaRealm practice stages, not a CEFR certification. Speech recognition checks the transcript, not pronunciation quality.
+      </p>
       <AudioSettings app={app} />
       <EverydayWordsPanel />
       <ReviewPanel app={app} />

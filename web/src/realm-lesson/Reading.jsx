@@ -28,7 +28,9 @@ function Question({ q, number, total, onAnswered, onNext }) {
         <>
           <p lang="fr">{picked === q.answer ? 'Bonne réponse.' : 'Réponse : ' + q.optionsFr[q.answer] + '.'}</p>
           <English>{q.explanation}</English>
-          <button type="button" onClick={onNext}>Next</button>
+          <button type="button" onClick={onNext}>
+            Next
+          </button>
         </>
       )}
     </>
@@ -50,7 +52,9 @@ export default function Reading({ pack, speak }) {
           <h3>{pack.reading.title}</h3>
           <p lang="fr">{pack.reading.fr}</p>
           <English>{pack.reading.en}</English>
-          <button type="button" onClick={() => speak(pack.reading.fr)}>Listen to the text</button>
+          <button type="button" onClick={() => speak(pack.reading.fr)}>
+            Listen to the text
+          </button>
         </>
       )}
       <div>

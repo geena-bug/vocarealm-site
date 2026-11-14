@@ -23,14 +23,20 @@ function PartnerTurn({ line, roleName, watching, speak, onContinue }) {
   return (
     <>
       <strong>{roleName}</strong>
-      <div className="speech-bubble" lang="fr">{line.fr}</div>
+      <div className="speech-bubble" lang="fr">
+        {line.fr}
+      </div>
       <p role="status">{status}</p>
       <details>
         <summary>English translation</summary>
         <p>{line.en}</p>
       </details>
-      <button type="button" onClick={() => speak(line.fr, line.actor)}>Replay line</button>
-      <button type="button" onClick={onContinue}>Continue</button>
+      <button type="button" onClick={() => speak(line.fr, line.actor)}>
+        Replay line
+      </button>
+      <button type="button" onClick={onContinue}>
+        Continue
+      </button>
     </>
   );
 }
@@ -42,14 +48,18 @@ function MyTurn({ line, previous, roles, speak, onReply }) {
   return (
     <>
       <strong>{roles[line.actor]}</strong>
-      <div className="speech-bubble" lang="fr">Your turn — respond in French.</div>
+      <div className="speech-bubble" lang="fr">
+        Your turn — respond in French.
+      </div>
       <p role="status">{status}</p>
       {previous ? (
         <section className="partner-context">
           <strong>{roles[previous.actor]} said</strong>
           <p lang="fr">{previous.fr}</p>
           <English>{previous.en}</English>
-          <button type="button" onClick={() => speak(previous.fr, previous.actor)}>Listen to partner again</button>
+          <button type="button" onClick={() => speak(previous.fr, previous.actor)}>
+            Listen to partner again
+          </button>
         </section>
       ) : (
         <p>You start this conversation. Use the mission or a hint to begin.</p>
@@ -58,10 +68,19 @@ function MyTurn({ line, previous, roles, speak, onReply }) {
         <summary>Show a suggested reply</summary>
         <p lang="fr">{line.fr}</p>
         <p>{line.en}</p>
-        <button type="button" onClick={() => speak(line.fr, line.actor)}>Listen to suggested reply</button>
-        <a href={'pronunciation.html?text=' + encodeURIComponent(line.fr)} target="_blank">Practise pronunciation of this suggestion</a>
+        <button type="button" onClick={() => speak(line.fr, line.actor)}>
+          Listen to suggested reply
+        </button>
+        <a href={'pronunciation.html?text=' + encodeURIComponent(line.fr)} target="_blank">
+          Practise pronunciation of this suggestion
+        </a>
       </details>
-      <textarea placeholder="Type your reply in French, or record it below" aria-label="Your French reply" value={text} onChange={(e) => setText(e.target.value)} />
+      <textarea
+        placeholder="Type your reply in French, or record it below"
+        aria-label="Your French reply"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
       <button
         type="button"
         onClick={() => {
@@ -126,14 +145,19 @@ export default function Conversation({ realm, meta, pack, progress, save, speak,
       <>
         <h3>Scene complete</h3>
         <p>You practised {play.scene.title}. Try the other role or the next scene.</p>
-        <button type="button" onClick={onReview}>Review this conversation</button>
+        <button type="button" onClick={onReview}>
+          Review this conversation
+        </button>
       </>
     );
   } else if (play) {
     const { scene, index, role } = play;
     const line = scene.lines[index];
     const mine = line.actor === role;
-    const previous = scene.lines.slice(0, index).reverse().find((l) => l.actor !== role);
+    const previous = scene.lines
+      .slice(0, index)
+      .reverse()
+      .find((l) => l.actor !== role);
     body = (
       <>
         <p>{scene.mission}</p>
@@ -172,22 +196,28 @@ export default function Conversation({ realm, meta, pack, progress, save, speak,
       {CAST_IMAGES.includes(realm) && <img className="lesson-cast" src={'/assets/' + realm + '-cast-v3.png'} alt={meta.name + ' conversation characters'} />}
       <h2>Take part in the conversation</h2>
       <p>
-        Choose either role, or watch both. Scripted practice uses browser French audio and text. Submitted replies and recordings are kept in Conversation review on
-        this browser. Automatic pronunciation assessment is not connected.
+        Choose either role, or watch both. Scripted practice uses browser French audio and text. Submitted replies and recordings are kept in Conversation
+        review on this browser. Automatic pronunciation assessment is not connected.
       </p>
       <div className="role-tools">
         <select aria-label="Conversation scene" value={sceneIndex} onChange={changed(setSceneIndex)}>
           {pack.scenes.map((s, i) => (
-            <option key={i} value={i}>{s.title}</option>
+            <option key={i} value={i}>
+              {s.title}
+            </option>
           ))}
         </select>
         <select aria-label="Your role" value={roleChoice} onChange={changed(setRoleChoice)}>
           {pack.roles.map((r, i) => (
-            <option key={i} value={i}>I am the {r}</option>
+            <option key={i} value={i}>
+              I am the {r}
+            </option>
           ))}
           <option value={WATCH}>Watch both</option>
         </select>
-        <button type="button" onClick={startScene}>Start conversation</button>
+        <button type="button" onClick={startScene}>
+          Start conversation
+        </button>
       </div>
       <div>{body}</div>
     </>

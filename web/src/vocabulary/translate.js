@@ -6,12 +6,18 @@ const setupHelp =
   'To turn it on, deploy the vocabulary-translate Supabase function and add its ANTHROPIC_API_KEY secret (see integrations/translation/README.md).';
 
 export const normalize = (s) =>
-  String(s || '').normalize('NFC').trim().toLowerCase()
+  String(s || '')
+    .normalize('NFC')
+    .trim()
+    .toLowerCase()
     .replace(/^(?:an?|the|to)\s+/, '')
     .replace(/[.,;:!?]+$/, '');
 
 export const normalizeFrench = (s) =>
-  String(s || '').normalize('NFC').trim().toLowerCase()
+  String(s || '')
+    .normalize('NFC')
+    .trim()
+    .toLowerCase()
     .replace(/’/g, "'")
     .replace(/^(?:un|une|le|la|les|des|du|de la|l'|de l')\s*/, '')
     .replace(/[.,;:!?]+$/, '');
@@ -24,7 +30,11 @@ function rank(query, words, field, norm) {
   return words
     .map((w) => {
       const value = norm(field(w));
-      const exact = value === q || String(field(w) || '').split(/\s*(?:\/|;|,|\bor\b)\s*/).some((part) => norm(part) === q);
+      const exact =
+        value === q ||
+        String(field(w) || '')
+          .split(/\s*(?:\/|;|,|\bor\b)\s*/)
+          .some((part) => norm(part) === q);
       const related = (' ' + value + ' ').includes(' ' + q + ' ');
       return { ...w, rank: exact ? 0 : related ? 1 : 2 };
     })
@@ -53,9 +63,7 @@ export async function translateRemote(text, direction, { auth, fetch }) {
     try {
       configured = (await (await fetch(endpoint)).json()).configured === true;
     } catch {}
-    return configured
-      ? { error: 'sign_in_required', message: 'Log in to translate words that are not in the word bank yet.' }
-      : { error: 'not_configured' };
+    return configured ? { error: 'sign_in_required', message: 'Log in to translate words that are not in the word bank yet.' } : { error: 'not_configured' };
   }
   let response;
   let body = null;
@@ -72,9 +80,7 @@ export async function translateRemote(text, direction, { auth, fetch }) {
     body = await response.json();
   } catch {}
   if (!body || response.status === 404) return { error: 'not_configured' };
-  return response.ok && !body.error
-    ? body
-    : { error: body.error || 'translation_unavailable', message: body.message };
+  return response.ok && !body.error ? body : { error: body.error || 'translation_unavailable', message: body.message };
 }
 
 export function explain(result) {

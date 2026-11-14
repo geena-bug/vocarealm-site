@@ -31,8 +31,8 @@ function Feedback({ result, say }) {
         })}
       </div>
       <p className="tiny">
-        This is automated feedback, not a judgement of your accent. If the recording was noisy or the words were misheard, record again. Omissions and extra words
-        are separate from pronunciation errors.
+        This is automated feedback, not a judgement of your accent. If the recording was noisy or the words were misheard, record again. Omissions and extra
+        words are separate from pronunciation errors.
       </p>
     </>
   );
@@ -40,7 +40,9 @@ function Feedback({ result, say }) {
 
 // Read-aloud practice: listen to the model, record (max 20 s), replay, and optionally send for assessment.
 export default function PronunciationPage({ user }) {
-  const [reference, setReference] = useState(() => new URLSearchParams(location.search).get('text')?.slice(0, 500) || 'Bonjour, je voudrais réserver une chambre.');
+  const [reference, setReference] = useState(
+    () => new URLSearchParams(location.search).get('text')?.slice(0, 500) || 'Bonjour, je voudrais réserver une chambre.',
+  );
   const [configured, setConfigured] = useState(null);
   const [status, setStatus] = useState('');
   const [recording, setRecording] = useState(false);
@@ -94,7 +96,8 @@ export default function PronunciationPage({ user }) {
       return;
     }
     if (!reference.trim()) return setStatus('Add a French word or short sentence first.');
-    if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) return setStatus('Recording is unavailable in this browser. You can listen to the model instead.');
+    if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder)
+      return setStatus('Recording is unavailable in this browser. You can listen to the model instead.');
     cleanup();
     const current = l.epoch;
     stopSpeaking();
@@ -118,7 +121,11 @@ export default function PronunciationPage({ user }) {
         const blob = new Blob(chunks, { type: recorder.mimeType });
         if (!blob.size) return setStatus('No audio was captured. Try again.');
         setClip({ blob, url: URL.createObjectURL(blob) });
-        setStatus(configured ? 'Recording ready. Replay it, then check your pronunciation when you’re ready.' : 'Recording ready for replay. Assessment is not connected yet.');
+        setStatus(
+          configured
+            ? 'Recording ready. Replay it, then check your pronunciation when you’re ready.'
+            : 'Recording ready for replay. Assessment is not connected yet.',
+        );
       };
       recorder.start();
       setRecording(true);
@@ -128,7 +135,11 @@ export default function PronunciationPage({ user }) {
       l.timer = setTimeout(() => recorder.state === 'recording' && recorder.stop(), MAX_SECONDS * 1000);
     } catch (e) {
       cleanup();
-      setStatus(e.name === 'NotAllowedError' ? 'Microphone access was blocked. Allow microphone access in your browser settings, then try again.' : 'The microphone could not record. Check your input device and try again.');
+      setStatus(
+        e.name === 'NotAllowedError'
+          ? 'Microphone access was blocked. Allow microphone access in your browser settings, then try again.'
+          : 'The microphone could not record. Check your input device and try again.',
+      );
     }
   }
 
@@ -138,7 +149,9 @@ export default function PronunciationPage({ user }) {
     const request = new AbortController();
     live.current.request = request;
     try {
-      const { data: { session } } = await window.vocaAuth.client.auth.getSession();
+      const {
+        data: { session },
+      } = await window.vocaAuth.client.auth.getSession();
       if (!session) throw Error('Please log in again to request feedback.');
       const body = new FormData();
       body.append('reference', reference.trim());
@@ -171,7 +184,9 @@ export default function PronunciationPage({ user }) {
         <span className="eyebrow">Listen. Say it. Try again.</span>
         <h1>Bring your words to life.</h1>
         <p>Read a French word or short sentence aloud. Listen to the model, record your reading and replay it.</p>
-        <p id="pronAvailability" className="notice" role="status">{availability}</p>
+        <p id="pronAvailability" className="notice" role="status">
+          {availability}
+        </p>
         <label htmlFor="pronReference">French text to read</label>
         <textarea
           id="pronReference"
@@ -190,25 +205,31 @@ export default function PronunciationPage({ user }) {
           }}
         />
         <div className="actions">
-          <button id="pronListen" className="btn" type="button" onClick={() => say(reference, 0.85)}>▷ Listen to the example</button>
-          <button id="pronSlow" className="btn" type="button" onClick={() => say(reference, 0.65)}>▷ Listen slowly</button>
+          <button id="pronListen" className="btn" type="button" onClick={() => say(reference, 0.85)}>
+            ▷ Listen to the example
+          </button>
+          <button id="pronSlow" className="btn" type="button" onClick={() => say(reference, 0.65)}>
+            ▷ Listen slowly
+          </button>
           <button id="pronRecord" className="btn blue" type="button" disabled={busy} onClick={record}>
             {recording ? '■ Stop recording' : clip ? '🎙 Record again' : '🎙 Record my reading'}
           </button>
         </div>
-        <p id="pronStatus" className="status" role="status">{status}</p>
+        <p id="pronStatus" className="status" role="status">
+          {status}
+        </p>
         <audio id="pronPlayback" controls hidden={!clip} src={clip?.url} />
         <label className="consent">
           <input id="pronConsent" type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
-          Send this recording to Microsoft Azure for pronunciation assessment. The recording stays on this page until I request assessment; VocaRealm does not save a
-          copy of the audio.
+          Send this recording to Microsoft Azure for pronunciation assessment. The recording stays on this page until I request assessment; VocaRealm does not
+          save a copy of the audio.
         </label>
         <button id="pronCheck" className="btn blue" type="button" disabled={!(configured && user && clip && consent && !busy)} onClick={check}>
           Check pronunciation
         </button>
         <p className="tiny">
-          Maximum 20 seconds per recording. Feedback appears after assessment, not live while speaking. Automatic feedback may be affected by noise or recognition
-          errors.
+          Maximum 20 seconds per recording. Feedback appears after assessment, not live while speaking. Automatic feedback may be affected by noise or
+          recognition errors.
         </p>
         <div id="pronResult">{result && <Feedback result={result} say={say} />}</div>
         <p>

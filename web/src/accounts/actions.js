@@ -8,7 +8,8 @@ const messages = {
   user_already_exists: 'If you already have an account, log in or reset your password.',
   over_email_send_rate_limit: 'Too many emails have been requested. Please wait a while before trying again.',
   over_request_rate_limit: 'Too many attempts. Please wait before trying again.',
-  email_address_not_authorized: 'Verification email is not available for this address yet. Public registration is waiting for our email service to be configured.',
+  email_address_not_authorized:
+    'Verification email is not available for this address yet. Public registration is waiting for our email service to be configured.',
   signup_disabled: 'Registration is temporarily closed. You can still explore the demo.',
   weak_password: 'Please choose a longer, stronger password.',
   same_password: 'Choose a password different from your current one.',
@@ -19,12 +20,16 @@ export const submitLabels = { signup: 'Create account', login: 'Log in', forgot:
 
 export function friendly(error) {
   if (error?.message?.toLowerCase().includes('email address not authorized')) return messages.email_address_not_authorized;
-  return messages[error?.code] || (error?.status === 429 ? messages.over_request_rate_limit : 'We couldn’t complete that request. Check your connection and try again.');
+  return (
+    messages[error?.code] ||
+    (error?.status === 429 ? messages.over_request_rate_limit : 'We couldn’t complete that request. Check your connection and try again.')
+  );
 }
 
 // Checks done before contacting Supabase. Returns an error message, or null.
 export function precheck(mode, { password = '', confirmPassword, username }) {
-  if (confirmPassword !== undefined && password !== confirmPassword) return { message: 'Your passwords don’t match. Please enter them again.', error: true, focus: 'confirmPassword' };
+  if (confirmPassword !== undefined && password !== confirmPassword)
+    return { message: 'Your passwords don’t match. Please enter them again.', error: true, focus: 'confirmPassword' };
   if (mode === 'signup' && !/^[a-z0-9_]{3,24}$/.test(username.trim().toLowerCase())) {
     return { message: 'Use 3–24 letters, numbers or underscores for your username.', error: true };
   }
@@ -74,7 +79,8 @@ export async function checkRecovery({ client, recoveryLink, session = sessionSto
   if (recoveryLink) session.setItem('vocarealm-recovery', 'active');
   try {
     const { data } = await client.auth.getSession();
-    if (!recovery || !data.session) return { message: 'Open the password reset link from your email first. If it expired, request a new one.', error: true, expired: true };
+    if (!recovery || !data.session)
+      return { message: 'Open the password reset link from your email first. If it expired, request a new one.', error: true, expired: true };
     return { message: 'Choose a new password for your VocaRealm account.', ready: true };
   } catch {
     return { message: 'This reset link could not be verified. Request another link.', error: true };

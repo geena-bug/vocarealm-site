@@ -22,7 +22,15 @@ function buildPacks(store) {
       const built = window.vocaBuiltins.filter((w) => w.scenarioId === id && w.source === 'course');
       const custom = store.items
         .filter((w) => w.realm === id && (!w.level || w.level === 'A1'))
-        .map((w) => ({ ...w, id: 'user_' + w.id, translation: w.meaning, sentence: w.example, sentenceTranslation: w.example_translation, scenarioId: id, sceneId: 'My words · ' + id }));
+        .map((w) => ({
+          ...w,
+          id: 'user_' + w.id,
+          translation: w.meaning,
+          sentence: w.example,
+          sentenceTranslation: w.example_translation,
+          scenarioId: id,
+          sceneId: 'My words · ' + id,
+        }));
       const merged = C.merge(built, custom);
       return [id, merged.map((w) => C.exerciseWord(w, merged))];
     }),
@@ -41,13 +49,23 @@ function AccountSlot({ account, levelCode }) {
       <b>{account.profile?.username || (account.user ? 'Learner' : 'Guest learner')}</b>
       <p style={{ fontSize: 11 }}>Progress saved on this browser</p>
       {account.user ? (
-        <button className="secondary" onClick={logout}>Log out</button>
+        <button className="secondary" onClick={logout}>
+          Log out
+        </button>
       ) : (
-        <a className="secondary" href="login.html">Log in</a>
+        <a className="secondary" href="login.html">
+          Log in
+        </a>
       )}
-      <p id="accountNavStatus" role="status" style={{ fontSize: 12 }}>{message}</p>
-      <a href="levels.html" style={{ display: 'block', marginTop: 15, color: '#2563eb', fontSize: 12 }}>My learning level · {levelCode} →</a>
-      <a href="vocabulary.html" style={{ display: 'block', marginTop: 12, color: '#2563eb' }}>My vocabulary →</a>
+      <p id="accountNavStatus" role="status" style={{ fontSize: 12 }}>
+        {message}
+      </p>
+      <a href="levels.html" style={{ display: 'block', marginTop: 15, color: '#2563eb', fontSize: 12 }}>
+        My learning level · {levelCode} →
+      </a>
+      <a href="vocabulary.html" style={{ display: 'block', marginTop: 12, color: '#2563eb' }}>
+        My vocabulary →
+      </a>
     </div>
   );
 }
@@ -190,15 +208,45 @@ export default function HotelApp({ account, store, levelState }) {
       const pack = contentPacks[realmId];
       const queue = reviewSession(pack, data.current.vocabularyProgress, { C: C() });
       if (!queue.length) {
-        alert(realmId === 'hotel' ? 'Start a Hotel lesson first. Introduced words will be available here.' : 'Start a lesson in this realm first. Introduced words will appear here.');
+        alert(
+          realmId === 'hotel'
+            ? 'Start a Hotel lesson first. Introduced words will be available here.'
+            : 'Start a lesson in this realm first. Introduced words will appear here.',
+        );
         return;
       }
       setLevel('A1');
-      setLesson({ mode: 'pack', realmId, pack, queue, step: 0, selected: -1, checked: false, correct: 0, earned: 0, missed: [], review: true, session: 'session-' + Date.now(), wordCount: 0, baseTotal: queue.length });
+      setLesson({
+        mode: 'pack',
+        realmId,
+        pack,
+        queue,
+        step: 0,
+        selected: -1,
+        checked: false,
+        correct: 0,
+        earned: 0,
+        missed: [],
+        review: true,
+        session: 'session-' + Date.now(),
+        wordCount: 0,
+        baseTotal: queue.length,
+      });
       show({ name: 'lesson' });
     },
     startStarter(realmId, length) {
-      setLesson({ mode: 'starter', realmId, order: length === 5 ? [0] : [0, 1, 2], step: 0, selected: -1, checked: false, score: 0, earned: 0, missed: [], reviewing: false });
+      setLesson({
+        mode: 'starter',
+        realmId,
+        order: length === 5 ? [0] : [0, 1, 2],
+        step: 0,
+        selected: -1,
+        checked: false,
+        score: 0,
+        earned: 0,
+        missed: [],
+        reviewing: false,
+      });
       show({ name: 'lesson' });
     },
     reviewMissed() {
@@ -256,7 +304,11 @@ export default function HotelApp({ account, store, levelState }) {
         rememberMissed(d, lesson.missed);
         persist();
         const count = (state) => lesson.pack.filter((w) => d.vocabularyProgress[w.id]?.state === state).length;
-        show({ name: 'packResults', realmId: lesson.realmId, result: { correct: lesson.correct, baseTotal: lesson.baseTotal, earned: lesson.earned, familiar: count('familiar'), mastered: count('mastered') } });
+        show({
+          name: 'packResults',
+          realmId: lesson.realmId,
+          result: { correct: lesson.correct, baseTotal: lesson.baseTotal, earned: lesson.earned, familiar: count('familiar'), mastered: count('mastered') },
+        });
         return;
       }
       const total = lesson.reviewing ? lesson.missed.length : lesson.order.length + 4;
@@ -296,10 +348,22 @@ export default function HotelApp({ account, store, levelState }) {
   function currentQuestion() {
     if (!lesson) return null;
     if (lesson.mode === 'pack') return lesson.queue[lesson.step];
-    return starterQuestion(realms.find((r) => r.id === lesson.realmId), lesson.order, lesson.step, lesson.reviewing, lesson.missed);
+    return starterQuestion(
+      realms.find((r) => r.id === lesson.realmId),
+      lesson.order,
+      lesson.step,
+      lesson.reviewing,
+      lesson.missed,
+    );
   }
 
-  const navPage = ['Home', 'Progress', 'Profile'].includes(view.name) ? view.name : view.name === 'player' ? (['Home', 'Progress', 'Profile'].includes(view.previous.name) ? view.previous.name : 'Realms') : 'Realms';
+  const navPage = ['Home', 'Progress', 'Profile'].includes(view.name)
+    ? view.name
+    : view.name === 'player'
+      ? ['Home', 'Progress', 'Profile'].includes(view.previous.name)
+        ? view.previous.name
+        : 'Realms'
+      : 'Realms';
   const realm = realms.find((r) => r.id === (view.realmId || lesson?.realmId));
   let screen = null;
   if (view.name === 'Home') screen = <Home app={app} />;
@@ -309,7 +373,10 @@ export default function HotelApp({ account, store, levelState }) {
   else if (view.name === 'lesson' && lesson) {
     const q = currentQuestion();
     const total = lesson.mode === 'pack' ? lesson.queue.length : lesson.reviewing ? lesson.missed.length : lesson.order.length + 4;
-    const label = lesson.mode === 'pack' ? realm.name + ' · ' + (q.review ? 'Review' : 'Practice') + ' · ' + (lesson.step + 1) + '/' + total : realm.name + ' · ' + q.type + ' · ' + (lesson.step + 1) + '/' + total;
+    const label =
+      lesson.mode === 'pack'
+        ? realm.name + ' · ' + (q.review ? 'Review' : 'Practice') + ' · ' + (lesson.step + 1) + '/' + total
+        : realm.name + ' · ' + q.type + ' · ' + (lesson.step + 1) + '/' + total;
     screen = <Question key={lesson.session || lesson.realmId} app={app} realm={realm} lesson={lesson} q={q} label={label} progress={lesson.step / total} />;
   } else if (view.name === 'packResults') screen = <PackResults app={app} realm={realm} result={view.result} />;
   else if (view.name === 'starterResults') screen = <StarterResults app={app} realm={realm} lesson={lesson} />;
@@ -322,7 +389,9 @@ export default function HotelApp({ account, store, levelState }) {
           <img src="/assets/vocarealm-logo.png" alt="" width="43" height="43" style={{ verticalAlign: 'middle', marginRight: 7, borderRadius: 10 }} />
           VocaRealm
         </div>
-        <a href="index.html" style={{ display: 'block', marginTop: 14, fontSize: 12, color: '#2563eb' }}>← VocaRealm website</a>
+        <a href="index.html" style={{ display: 'block', marginTop: 14, fontSize: 12, color: '#2563eb' }}>
+          ← VocaRealm website
+        </a>
         <div className="tag">LEARN IT. SEE IT. USE IT.</div>
         <nav id="nav">
           {NAV.map(([page, icon]) => (
@@ -338,11 +407,15 @@ export default function HotelApp({ account, store, levelState }) {
           <span className="muted">Your next conversation starts here.</span>
           <div className="stats">
             <span className="pill">🇫🇷 French</span>
-            <span className="pill" id="xp">✦ {data.current.xp} XP</span>
+            <span className="pill" id="xp">
+              ✦ {data.current.xp} XP
+            </span>
           </div>
         </header>
         {globalStatus !== null && (
-          <p id="globalVoiceStatus" role="status" className="status">{globalStatus}</p>
+          <p id="globalVoiceStatus" role="status" className="status">
+            {globalStatus}
+          </p>
         )}
         <div id="app">{screen}</div>
       </main>

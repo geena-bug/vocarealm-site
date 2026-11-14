@@ -5,7 +5,14 @@
 export function exercise(word, type, { pack, C, review = false }) {
   const fill = type === 'sentence' && !!word.fillPrompt;
   const correct = fill ? word.fillAnswer : word.translation;
-  const others = [...new Set(pack.filter((x) => x.id !== word.id).map((x) => (fill ? x.term : x.translation)).filter((x) => C.norm(x) !== C.norm(correct)))];
+  const others = [
+    ...new Set(
+      pack
+        .filter((x) => x.id !== word.id)
+        .map((x) => (fill ? x.term : x.translation))
+        .filter((x) => C.norm(x) !== C.norm(correct)),
+    ),
+  ];
   return {
     title: fill ? 'Complete the sentence' : 'What does this mean?',
     prompt: fill ? word.fillPrompt : word.term,
@@ -98,7 +105,16 @@ export function starterQuestion(realm, order, step, reviewing, missed) {
   }
   if (step < order.length) {
     const w = realm.words[order[step]];
-    return { title: 'What does this mean?', prompt: w[0], translation: w[1], options: [...realm.words.map((x) => x[1]), 'A map'], answer: order[step], example: w[2], word: w, type: 'Discover' };
+    return {
+      title: 'What does this mean?',
+      prompt: w[0],
+      translation: w[1],
+      options: [...realm.words.map((x) => x[1]), 'A map'],
+      answer: order[step],
+      example: w[2],
+      word: w,
+      type: 'Discover',
+    };
   }
   if (step === order.length) {
     const [prompt, options, answer] = realm.challenge;

@@ -80,7 +80,9 @@ function createController(rerender, app) {
     c.s.showSuggestion = false;
     if (c.learnerTurn()) {
       c.s.learnerStatus = { text: 'Ready. Choose Record my reply, speak French, stop the recording, then send. You can also type.' };
-      c.s.status = { text: 'Waiting for your reply as ' + (c.s.role === 'guest' ? 'the guest' : 'the receptionist') + '. Speak or type, then choose Send reply & continue.' };
+      c.s.status = {
+        text: 'Waiting for your reply as ' + (c.s.role === 'guest' ? 'the guest' : 'the receptionist') + '. Speak or type, then choose Send reply & continue.',
+      };
     }
     refresh();
   };
@@ -134,7 +136,10 @@ function createController(rerender, app) {
       return false;
     }
     if (!window.speechSynthesis) {
-      status('Audio is unavailable in this browser. You can read both translations and move through the scene. Try a browser with a French speech voice for audio.', true);
+      status(
+        'Audio is unavailable in this browser. You can read both translations and move through the scene. Try a browser with a French speech voice for audio.',
+        true,
+      );
       return false;
     }
     c.stopAudio();
@@ -163,7 +168,11 @@ function createController(rerender, app) {
       if (token !== c.token || c.s !== s) return;
       clearTimeout(c.watchdog);
       s.talking = false;
-      c.lineEnded(autoContinue, 'Conversation complete. Replay a line, start again, or try the other scene.', 'Line finished. Press Play to continue the conversation.');
+      c.lineEnded(
+        autoContinue,
+        'Conversation complete. Replay a line, start again, or try the other scene.',
+        'Line finished. Press Play to continue the conversation.',
+      );
     };
     u.onerror = (e) => {
       if (token !== c.token) return;
@@ -177,7 +186,10 @@ function createController(rerender, app) {
     c.watchdog = setTimeout(() => {
       if (token === c.token && !began) {
         c.stopAudio();
-        status('Audio did not start. Check device sound and install or select a French system voice. You can still step through the translated conversation.', true);
+        status(
+          'Audio did not start. Check device sound and install or select a French system voice. You can still step through the translated conversation.',
+          true,
+        );
         if (s.examplePreview) c.finishExample(s.status.text);
       }
     }, 6000);
@@ -350,7 +362,11 @@ function createController(rerender, app) {
     c.stopRecognition();
     Object.assign(c.s, { role, index: 0, finished: false, responses: {}, drafts: {} });
     c.rebuilt();
-    status(role === 'watch' ? 'Ready to watch both characters.' : 'You are the ' + (role === 'guest' ? 'guest' : 'receptionist') + '. Press Play to begin, or send your reply if it is your turn.');
+    status(
+      role === 'watch'
+        ? 'Ready to watch both characters.'
+        : 'You are the ' + (role === 'guest' ? 'guest' : 'receptionist') + '. Press Play to begin, or send your reply if it is your turn.',
+    );
   };
 
   c.setVoice = (role, name) => {
@@ -374,11 +390,16 @@ function createController(rerender, app) {
 
   function reviewSession() {
     const s = c.s;
-    if (!s.reviewSession) s.reviewSession = review().create('hotel', s.kind === 'booking' ? 'Hotel booking' : 'Hotel check-in', s.role === 'guest' ? 'Guest' : 'Receptionist');
+    if (!s.reviewSession)
+      s.reviewSession = review().create('hotel', s.kind === 'booking' ? 'Hotel booking' : 'Hotel check-in', s.role === 'guest' ? 'Guest' : 'Receptionist');
     return s.reviewSession;
   }
 
-  c.previousPartnerLine = () => lines().slice(0, c.s.index).reverse().find((l) => l[0] !== c.s.role);
+  c.previousPartnerLine = () =>
+    lines()
+      .slice(0, c.s.index)
+      .reverse()
+      .find((l) => l[0] !== c.s.role);
 
   c.submit = () => {
     const s = c.s;
@@ -399,7 +420,15 @@ function createController(rerender, app) {
       const l = line();
       const previous = c.previousPartnerLine();
       reviewSession().then((session) =>
-        review().capture(session, { index, text, blob: clip?.blob || null, partnerFr: previous?.[1] || '', partnerEn: previous?.[2] || '', modelFr: l[1], modelEn: l[2] }),
+        review().capture(session, {
+          index,
+          text,
+          blob: clip?.blob || null,
+          partnerFr: previous?.[1] || '',
+          partnerEn: previous?.[2] || '',
+          modelFr: l[1],
+          modelEn: l[2],
+        }),
       );
     }
     if (clip) {
@@ -410,7 +439,9 @@ function createController(rerender, app) {
     }
     if (!text) {
       learnerStatus(
-        c.recognition ? 'No words have been transcribed yet. Keep speaking, or stop the microphone and type your reply.' : 'No reply was captured. Start the microphone and wait for words to appear, or type your reply.',
+        c.recognition
+          ? 'No words have been transcribed yet. Keep speaking, or stop the microphone and type your reply.'
+          : 'No reply was captured. Start the microphone and wait for words to appear, or type your reply.',
         true,
       );
       document.getElementById('learnerReply')?.focus();
@@ -465,7 +496,10 @@ function createController(rerender, app) {
     }
     const R = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!R) {
-      learnerStatus('This browser does not expose speech recognition. Type your reply here, or open the site directly in Chrome or Safari and allow microphone access.', true);
+      learnerStatus(
+        'This browser does not expose speech recognition. Type your reply here, or open the site directly in Chrome or Safari and allow microphone access.',
+        true,
+      );
       document.getElementById('learnerReply')?.focus();
       return;
     }
@@ -487,7 +521,10 @@ function createController(rerender, app) {
       learnerStatus('Listening… speak French now. Your words will appear above.');
       c.recognitionTimer = setTimeout(() => {
         if (current() && !heard)
-          learnerStatus('The microphone started, but no transcript has arrived. Speak closer to it, then stop. If no words appear, type your reply—the browser’s recognition service may be unavailable.', true);
+          learnerStatus(
+            'The microphone started, but no transcript has arrived. Speak closer to it, then stop. If no words appear, type your reply—the browser’s recognition service may be unavailable.',
+            true,
+          );
       }, 10000);
     };
     active.onresult = (e) => {
@@ -726,13 +763,23 @@ function LearnerReply({ c }) {
         <button id="recordReplyButton" className="secondary" onClick={c.record}>
           {rec.state === 'recording' ? '■ Stop recording' : rec.clip ? '🎙 Record again' : '🎙 Record my reply'}
         </button>
-        <button id="learnerMic" className="secondary" onClick={c.recognize}>{s.recognizing ? '■ Stop transcription' : 'Speech to text (optional)'}</button>
-        <button className="primary" onClick={c.submit}>Send reply & continue →</button>
-        <button className="secondary" onClick={c.revealSuggestion}>Need a hint?</button>
+        <button id="learnerMic" className="secondary" onClick={c.recognize}>
+          {s.recognizing ? '■ Stop transcription' : 'Speech to text (optional)'}
+        </button>
+        <button className="primary" onClick={c.submit}>
+          Send reply & continue →
+        </button>
+        <button className="secondary" onClick={c.revealSuggestion}>
+          Need a hint?
+        </button>
       </div>
-      <p id="learnerStatus" className={'status' + (s.learnerStatus.error ? ' dialog-error' : '')} role="status">{s.learnerStatus.text}</p>
+      <p id="learnerStatus" className={'status' + (s.learnerStatus.error ? ' dialog-error' : '')} role="status">
+        {s.learnerStatus.text}
+      </p>
       <div id="recordingIndicator" hidden={rec.state !== 'recording'} style={{ padding: 12, background: '#edf8f4', borderRadius: 12 }}>
-        <b id="recordingClock">Recording · {Math.floor(rec.seconds / 60)}:{String(rec.seconds % 60).padStart(2, '0')}</b>
+        <b id="recordingClock">
+          Recording · {Math.floor(rec.seconds / 60)}:{String(rec.seconds % 60).padStart(2, '0')}
+        </b>
         <label style={{ display: 'block', marginTop: 8 }}>
           Microphone level <meter id="recordingMeter" min={0} max={100} value={rec.level} style={{ width: '100%' }} />
         </label>
@@ -753,12 +800,20 @@ function LearnerReply({ c }) {
       <div id="learnerSuggestion" hidden={!s.showSuggestion}>
         <p lang="fr">{l[1]}</p>
         <p className="muted">{l[2]}</p>
-        <button className="secondary" onClick={() => c.playExample(s.index)}>▶ Listen to the example</button>{' '}
-        <button className="secondary" onClick={c.useSuggestion}>Put this line in my reply</button>
+        <button className="secondary" onClick={() => c.playExample(s.index)}>
+          ▶ Listen to the example
+        </button>{' '}
+        <button className="secondary" onClick={c.useSuggestion}>
+          Put this line in my reply
+        </button>
       </div>
       <p className="muted" style={{ fontSize: 12 }}>
-        Having trouble? <a href={location.href} target="_blank" rel="noopener">Open VocaRealm in a browser tab</a> and allow microphone access. Your browser may send
-        speech to its recognition service. If transcription is unavailable, you can type. This guided conversation follows a script; replies are not graded.
+        Having trouble?{' '}
+        <a href={location.href} target="_blank" rel="noopener">
+          Open VocaRealm in a browser tab
+        </a>{' '}
+        and allow microphone access. Your browser may send speech to its recognition service. If transcription is unavailable, you can type. This guided
+        conversation follows a script; replies are not graded.
       </p>
     </section>
   );
@@ -801,7 +856,8 @@ export default function ConversationPlayer({ app, kind, onClose }) {
   const mine = c.learnerTurn();
   const showVideo = c.hasVideo() && !mine;
   const voices = frenchVoices();
-  const playLabel = mine && !s.finished ? 'Your turn · reply below' : s.paused ? '▶ Resume' : s.playing ? 'Ⅱ Pause' : s.finished ? '↻ Play again' : '▶ Play conversation';
+  const playLabel =
+    mine && !s.finished ? 'Your turn · reply below' : s.paused ? '▶ Resume' : s.playing ? 'Ⅱ Pause' : s.finished ? '↻ Play again' : '▶ Play conversation';
 
   return (
     <div className="hotel-player">
@@ -832,7 +888,9 @@ export default function ConversationPlayer({ app, kind, onClose }) {
             <option value="guest">I’m the guest · wait for my replies</option>
             <option value="desk">I’m the receptionist · wait for my replies</option>
           </select>
-          <p className="muted" style={{ fontSize: 13, margin: 0 }}>Your partner speaks, then waits for you. Speak or type a reply and send it to continue.</p>
+          <p className="muted" style={{ fontSize: 13, margin: 0 }}>
+            Your partner speaks, then waits for you. Speak or type a reply and send it to continue.
+          </p>
         </div>
       </div>
       <div id="conversationStage" className={'dialog-stage speaker-' + l[0] + (s.talking ? ' audio-talking' : '')}>
@@ -853,43 +911,81 @@ export default function ConversationPlayer({ app, kind, onClose }) {
           )}
         </div>
         <span className="stage-speaker desk">
-          <span className="audio-bars" aria-hidden="true"><i /><i /><i /></span>Receptionist
+          <span className="audio-bars" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
+          Receptionist
         </span>
         <span className="stage-speaker guest">
-          <span className="audio-bars" aria-hidden="true"><i /><i /><i /></span>Guest
+          <span className="audio-bars" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
+          Guest
         </span>
         <SceneBubble c={c} />
       </div>
       {s.kind === 'checkin' && (
         <p className="video-stage-note">
-          <span className="video-mode-badge">Video preview · {Object.keys(hotelVideoClips).length}/{TOTAL_PLANNED_CLIPS} clips available</span>
+          <span className="video-mode-badge">
+            Video preview · {Object.keys(hotelVideoClips).length}/{TOTAL_PLANNED_CLIPS} clips available
+          </span>
           The first three turns use recorded video and audio. Other turns use illustrated practice; their videos are not installed yet.
         </p>
       )}
       <div className="subtitle-panel" aria-live="off">
         <div className="row">
-          <span id="dialogSpeaker" className="speaker-chip">{mine ? 'Your turn · ' + ROLE_NAME[s.role] : l[0] === 'desk' ? 'Receptionist · Réceptionniste' : 'Guest · Client'}</span>
-          <span id="dialogCount" className="muted">{s.index + 1 + ' / ' + conversation.lines.length}</span>
+          <span id="dialogSpeaker" className="speaker-chip">
+            {mine ? 'Your turn · ' + ROLE_NAME[s.role] : l[0] === 'desk' ? 'Receptionist · Réceptionniste' : 'Guest · Client'}
+          </span>
+          <span id="dialogCount" className="muted">
+            {s.index + 1 + ' / ' + conversation.lines.length}
+          </span>
         </div>
-        <p id="dialogFrench" lang="fr" className="subtitle-fr">{mine ? s.drafts[s.index] || s.responses[s.index] || 'What would you say in French?' : l[1]}</p>
-        <p id="dialogEnglish" className="subtitle-en" hidden={!s.translations}>{mine ? 'Your task: ' + l[2] : l[2]}</p>
+        <p id="dialogFrench" lang="fr" className="subtitle-fr">
+          {mine ? s.drafts[s.index] || s.responses[s.index] || 'What would you say in French?' : l[1]}
+        </p>
+        <p id="dialogEnglish" className="subtitle-en" hidden={!s.translations}>
+          {mine ? 'Your task: ' + l[2] : l[2]}
+        </p>
       </div>
-      <button id="hotelReviewButton" className="secondary" onClick={() => app.openReview(c.shutdown)}>Conversation review</button>
+      <button id="hotelReviewButton" className="secondary" onClick={() => app.openReview(c.shutdown)}>
+        Conversation review
+      </button>
       {mine && !(s.finished && s.index === conversation.lines.length - 1) && <LearnerReply key={s.kind + s.index} c={c} />}
       <div className="player-controls">
-        <button id="dialogPlay" className="primary" onClick={c.toggle}>{playLabel}</button>
-        <button className="secondary" onClick={() => c.move(-1)}>← Previous</button>
-        <button className="secondary" onClick={c.replay}>↻ Replay line</button>
-        <button className="secondary" onClick={() => c.move(1)}>Next →</button>
-        <button id="dialogTranslationToggle" className="secondary" onClick={c.toggleTranslations}>{s.translations ? 'Hide English' : 'Show English'}</button>
+        <button id="dialogPlay" className="primary" onClick={c.toggle}>
+          {playLabel}
+        </button>
+        <button className="secondary" onClick={() => c.move(-1)}>
+          ← Previous
+        </button>
+        <button className="secondary" onClick={c.replay}>
+          ↻ Replay line
+        </button>
+        <button className="secondary" onClick={() => c.move(1)}>
+          Next →
+        </button>
+        <button id="dialogTranslationToggle" className="secondary" onClick={c.toggleTranslations}>
+          {s.translations ? 'Hide English' : 'Show English'}
+        </button>
       </div>
-      <p id="dialogStatus" className={'status' + (s.status.error ? ' dialog-error' : '')} role="status">{s.status.text}</p>
+      <p id="dialogStatus" className={'status' + (s.status.error ? ' dialog-error' : '')} role="status">
+        {s.status.text}
+      </p>
       {s.videoError && (
-        <button id="systemAudioFallback" className="secondary" onClick={c.useSystemAudio}>Use system audio for this line</button>
+        <button id="systemAudioFallback" className="secondary" onClick={c.useSystemAudio}>
+          Use system audio for this line
+        </button>
       )}
       <details className="panel">
         <summary style={{ cursor: 'pointer', minHeight: 44 }}>Voices & playback settings</summary>
-        <p className="muted">Audio uses the French voices on your device. Two different voices are selected when available; otherwise both roles share one voice.</p>
+        <p className="muted">
+          Audio uses the French voices on your device. Two different voices are selected when available; otherwise both roles share one voice.
+        </p>
         <div className="dialog-voices">
           {['desk', 'guest'].map((role) => (
             <div key={role}>
@@ -897,7 +993,9 @@ export default function ConversationPlayer({ app, kind, onClose }) {
               <select id={role + 'Voice'} value={s.voices[role]} onChange={(e) => c.setVoice(role, e.target.value)}>
                 {voices.length ? (
                   voices.map((v) => (
-                    <option key={v.name} value={v.name}>{v.name} · {v.lang}</option>
+                    <option key={v.name} value={v.name}>
+                      {v.name} · {v.lang}
+                    </option>
                   ))
                 ) : (
                   <option value="">System French voice</option>
@@ -915,16 +1013,20 @@ export default function ConversationPlayer({ app, kind, onClose }) {
       <details className="panel">
         <summary style={{ cursor: 'pointer', minHeight: 44 }}>Full conversation · French & English</summary>
         <p className="muted" style={{ fontSize: 13 }}>
-          “Listen to this line” plays an example for either character, even when that character is your role. It does not send a learner reply. Voice settings above
-          apply to system speech; video clips use their recorded voices.
+          “Listen to this line” plays an example for either character, even when that character is your role. It does not send a learner reply. Voice settings
+          above apply to system speech; video clips use their recorded voices.
         </p>
         <div id="dialogTranscript">
           {conversation.lines.map((line, i) => (
             <div key={i} className={'transcript-turn' + (i === s.index ? ' current' : '')} data-turn={i}>
               <b>{ROLE_NAME[line[0]]}</b>
               <p lang="fr">{line[1]}</p>
-              <p className="muted" data-translation hidden={!s.translations}>{line[2]}</p>
-              <button className="secondary" onClick={() => c.playExample(i)}>▶ Listen to this line</button>
+              <p className="muted" data-translation hidden={!s.translations}>
+                {line[2]}
+              </p>
+              <button className="secondary" onClick={() => c.playExample(i)}>
+                ▶ Listen to this line
+              </button>
             </div>
           ))}
         </div>

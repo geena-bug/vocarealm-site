@@ -18,7 +18,9 @@ function Recording({ blob, index }) {
   return (
     <>
       <audio controls preload="none" src={url} />
-      <a href={url} download={'vocarealm-turn-' + (index + 1) + extension(blob.type)}>Download my recording</a>
+      <a href={url} download={'vocarealm-turn-' + (index + 1) + extension(blob.type)}>
+        Download my recording
+      </a>
     </>
   );
 }
@@ -67,7 +69,11 @@ function Turn({ session, turn }) {
           </div>
         ))
       ) : (
-        <p>{turn.text ? 'No covered text pattern was flagged. This is not a full grammar or pronunciation assessment.' : 'Pronunciation and grammar are not assessed for this recording.'}</p>
+        <p>
+          {turn.text
+            ? 'No covered text pattern was flagged. This is not a full grammar or pronunciation assessment.'
+            : 'Pronunciation and grammar are not assessed for this recording.'}
+        </p>
       )}
       <label>
         My corrected reply
@@ -76,12 +82,16 @@ function Turn({ session, turn }) {
       <button
         onClick={async () => {
           turn.corrected = corrected.trim();
-          setFeedback((await review().persist(session)) ? 'Correction saved on this browser.' : 'Correction kept for this page only; browser storage is unavailable.');
+          setFeedback(
+            (await review().persist(session)) ? 'Correction saved on this browser.' : 'Correction kept for this page only; browser storage is unavailable.',
+          );
         }}
       >
         Save correction
       </button>
-      <a href={'pronunciation.html?text=' + encodeURIComponent(turn.modelFr)} target="_blank" rel="noopener">Record the model again for practice</a>
+      <a href={'pronunciation.html?text=' + encodeURIComponent(turn.modelFr)} target="_blank" rel="noopener">
+        Record the model again for practice
+      </a>
     </article>
   );
 }
@@ -94,7 +104,9 @@ export default function ConversationReview({ realm }) {
 
   useEffect(() => {
     let current = true;
-    review().list(realm).then((list) => current && setSessions(list));
+    review()
+      .list(realm)
+      .then((list) => current && setSessions(list));
     return () => {
       current = false;
     };
@@ -104,8 +116,8 @@ export default function ConversationReview({ realm }) {
     <>
       <h2>Conversation review</h2>
       <p>
-        Your last five conversations in this realm stay on this browser when storage is available. Recordings are not uploaded. If browser storage is unavailable,
-        review lasts only until you leave this page.
+        Your last five conversations in this realm stay on this browser when storage is available. Recordings are not uploaded. If browser storage is
+        unavailable, review lasts only until you leave this page.
       </p>
       <p>
         Text guidance checks a few common patterns. A different valid reply is not an error. Audio-only replies have no transcript or verified pronunciation
@@ -114,7 +126,9 @@ export default function ConversationReview({ realm }) {
       {sessions?.length === 0 && <p>No submitted replies yet. Take a role and send a reply to start your review.</p>}
       {sessions?.map((session) => (
         <section className="review-session" key={session.id}>
-          <h3>{session.title} · {session.role}</h3>
+          <h3>
+            {session.title} · {session.role}
+          </h3>
           <small>{new Date(session.created).toLocaleString()}</small>
           <button
             onClick={async () => {

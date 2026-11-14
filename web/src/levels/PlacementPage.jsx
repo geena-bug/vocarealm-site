@@ -35,11 +35,17 @@ function Question({ attempt, onAnswer }) {
   const n = (i % QUESTIONS_PER_STAGE) + 1;
   return (
     <>
-      <span className="eyebrow">{code} stage · Question {n} of 6</span>
+      <span className="eyebrow">
+        {code} stage · Question {n} of 6
+      </span>
       <Heading>{q.prompt}</Heading>
       <p className="tiny">{q.skill} · Choose one answer.</p>
       <progress max={6} value={n - 1} aria-label={'Question ' + n + ' of 6 in ' + code} />
-      {q.text && <blockquote className="readingtext" lang="fr">{q.text}</blockquote>}
+      {q.text && (
+        <blockquote className="readingtext" lang="fr">
+          {q.text}
+        </blockquote>
+      )}
       <fieldset className="placementchoices">
         <legend className="sr-only">Answer choices</legend>
         {attempt.orders[i].map((index) => (
@@ -50,8 +56,12 @@ function Question({ attempt, onAnswer }) {
         ))}
       </fieldset>
       <div className="actions">
-        <button type="button" className="btn blue" disabled={selected === null} onClick={() => onAnswer(selected)}>Continue →</button>
-        <button type="button" className="btn" onClick={() => onAnswer(null)}>I don’t know / skip</button>
+        <button type="button" className="btn blue" disabled={selected === null} onClick={() => onAnswer(selected)}>
+          Continue →
+        </button>
+        <button type="button" className="btn" onClick={() => onAnswer(null)}>
+          I don’t know / skip
+        </button>
       </div>
       <p className="tiny">There’s no timer. Completed answers are saved on this browser so you can return later.</p>
     </>
@@ -86,16 +96,24 @@ function Result({ result, onUse, onRetake }) {
           })}
         </tbody>
       </table>
-      <button type="button" className="btn blue" onClick={onUse}>Use {result.recommended} as my starting level →</button>
-      <button type="button" className="btn" onClick={onRetake}>Retake the check</button>
-      <a className="btn" href="levels.html">Choose a different level</a>
+      <button type="button" className="btn blue" onClick={onUse}>
+        Use {result.recommended} as my starting level →
+      </button>
+      <button type="button" className="btn" onClick={onRetake}>
+        Retake the check
+      </button>
+      <a className="btn" href="levels.html">
+        Choose a different level
+      </a>
       <details>
         <summary>Review answers and explanations</summary>
         {result.answers.map((row) => {
           const q = bank[row.level][row.index];
           return (
             <section className="answerreview" key={row.level + row.index}>
-              <h3>{row.level} · {q.prompt}</h3>
+              <h3>
+                {row.level} · {q.prompt}
+              </h3>
               <p>Your answer: {row.choice === null ? 'Skipped' : q.options[row.choice]}</p>
               <p>Answer: {q.options[q.answer]}</p>
               <p className="tiny">{q.explanation}</p>
@@ -104,8 +122,8 @@ function Result({ result, onUse, onRetake }) {
         })}
       </details>
       <p className="tiny">
-        Provisional placement only. Not a validated CEFR or TEF assessment. Speaking, listening and extended writing still need separate evaluation. Your result is
-        saved in this browser.
+        Provisional placement only. Not a validated CEFR or TEF assessment. Speaking, listening and extended writing still need separate evaluation. Your result
+        is saved in this browser.
       </p>
     </>
   );
@@ -175,20 +193,31 @@ export default function PlacementPage({ state }) {
           Begin with six A1 questions. A score of at least 5/6 opens the next stage. We stop when a stage needs more practice, or after C2. Depending on your
           answers, you’ll see 6–36 questions.
         </p>
-        <p>Use your own knowledge, without a dictionary or translator. You can skip a question. Answers and explanations appear after the check, rather than during it.</p>
+        <p>
+          Use your own knowledge, without a dictionary or translator. You can skip a question. Answers and explanations appear after the check, rather than
+          during it.
+        </p>
         <p className="tiny">
-          This is a provisional written placement check, not a CEFR certificate. It does not test listening, speaking or extended writing. Advanced courses currently
-          offer starter practice.
+          This is a provisional written placement check, not a CEFR certificate. It does not test listening, speaking or extended writing. Advanced courses
+          currently offer starter practice.
         </p>
         {valid && attempt.answers.length > 0 && !attempt.finished ? (
           <>
-            <button type="button" className="btn blue" onClick={resume}>Resume my check →</button>
-            <button type="button" className="btn" onClick={() => confirm('Discard this unfinished check and start again?') && create()}>Start again</button>
+            <button type="button" className="btn blue" onClick={resume}>
+              Resume my check →
+            </button>
+            <button type="button" className="btn" onClick={() => confirm('Discard this unfinished check and start again?') && create()}>
+              Start again
+            </button>
           </>
         ) : (
-          <button type="button" className="btn blue" onClick={create}>Start the check →</button>
+          <button type="button" className="btn blue" onClick={create}>
+            Start the check →
+          </button>
         )}
-        <a className="btn" href="levels.html">Choose a level myself</a>
+        <a className="btn" href="levels.html">
+          Choose a level myself
+        </a>
       </>
     );
   } else if (view === 'question') {
@@ -203,9 +232,15 @@ export default function PlacementPage({ state }) {
         <p>
           You scored {C.stageScore(answers, passedCode)}/6 in this stage. Next, try {s.recommended} questions to refine your starting point.
         </p>
-        <button type="button" className="btn blue" onClick={() => setView('question')}>Continue to {s.recommended} →</button>
-        <button type="button" className="btn" onClick={() => finish(attempt)}>Finish here and use {s.recommended}</button>
-        <p className="tiny">Finishing here recommends the next stage because you met the earlier-stage threshold; it does not mean the next stage has been assessed.</p>
+        <button type="button" className="btn blue" onClick={() => setView('question')}>
+          Continue to {s.recommended} →
+        </button>
+        <button type="button" className="btn" onClick={() => finish(attempt)}>
+          Finish here and use {s.recommended}
+        </button>
+        <p className="tiny">
+          Finishing here recommends the next stage because you met the earlier-stage threshold; it does not mean the next stage has been assessed.
+        </p>
       </>
     );
   } else {
@@ -228,7 +263,11 @@ export default function PlacementPage({ state }) {
     <main>
       <section className="wrap section testwrap" id="placementRoot">
         {body}
-        {saveFailed && <p className="tiny" id="saveWarning">Browser storage is unavailable. Keep this tab open to finish your check.</p>}
+        {saveFailed && (
+          <p className="tiny" id="saveWarning">
+            Browser storage is unavailable. Keep this tab open to finish your check.
+          </p>
+        )}
       </section>
     </main>
   );

@@ -1,25 +1,181 @@
-const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),{spawn}=require('node:child_process');
-const dist='dist',pages=fs.readdirSync(dist).filter(f=>f.endsWith('.html'));
-function files(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?files(path.join(dir,e.name)):[path.join(dir,e.name)]);}
-function refs(html){return [...html.matchAll(/\b(?:src|href)="([^"]+)"/g)].map(m=>m[1]).filter(r=>!/^(https?:|mailto:|tel:|#|data:|javascript:)/.test(r)&&!r.includes('${'));}
-function local(ref){return path.join(dist,decodeURIComponent(ref.split(/[?#]/)[0]));}
-const scriptsOf=h=>[...h.matchAll(/<script[^>]*\ssrc="([^"]+)"/g)].map(m=>m[1].replace(/^\//,''));
-const bundled=f=>f.startsWith(path.join(dist,'app')+path.sep);
+const test = require('node:test'),
+  assert = require('node:assert/strict'),
+  fs = require('node:fs'),
+  path = require('node:path'),
+  vm = require('node:vm'),
+  { spawn } = require('node:child_process');
+const dist = 'dist',
+  pages = fs.readdirSync(dist).filter((f) => f.endsWith('.html'));
+function files(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? files(path.join(dir, e.name)) : [path.join(dir, e.name)]));
+}
+function refs(html) {
+  return [...html.matchAll(/\b(?:src|href)="([^"]+)"/g)]
+    .map((m) => m[1])
+    .filter((r) => !/^(https?:|mailto:|tel:|#|data:|javascript:)/.test(r) && !r.includes('${'));
+}
+function local(ref) {
+  return path.join(dist, decodeURIComponent(ref.split(/[?#]/)[0]));
+}
+const scriptsOf = (h) => [...h.matchAll(/<script[^>]*\ssrc="([^"]+)"/g)].map((m) => m[1].replace(/^\//, ''));
+const bundled = (f) => f.startsWith(path.join(dist, 'app') + path.sep);
 
-test('every page is a complete, mobile-ready English document',()=>{assert.ok(pages.length>=15);for(const p of pages){const h=fs.readFileSync(path.join(dist,p),'utf8');assert.match(h,/^<!doctype html>/i,p);assert.match(h,/<html lang="en">/,p);assert.match(h,/<meta charset="utf-8">/i,p);assert.match(h,/name="viewport"/,p);assert.match(h,/<title>[^<]*VocaRealm[^<]*<\/title>/,p);assert.match(h,/rel="icon"/,p);}});
-test('every local link, script, stylesheet and image on every page exists',()=>{const missing=[];for(const p of pages)for(const r of refs(fs.readFileSync(path.join(dist,p),'utf8')))if(!fs.existsSync(local(r)))missing.push(p+' → '+r);assert.deepEqual(missing,[]);});
-test('every element id is unique within its page',()=>{for(const p of pages){const ids=[...fs.readFileSync(path.join(dist,p),'utf8').matchAll(/\bid="([^"$]+)"/g)].map(m=>m[1]);assert.deepEqual(ids.filter((id,i)=>ids.indexOf(id)!==i),[],p);}});
-test('scripts used by a page are loaded before code that depends on them',()=>{const order=[['auth-client.js','vendor/supabase-2.118.0.js'],['accounts.js','auth-client.js'],['account-navigation.js','learning-data.js'],['realm-catalogue.js','realm-courses.js'],['vocabulary-store.js','vocabulary-base.js'],['realm-learning.js','realm-learning-core.js'],['placement.js','level-core.js'],['levels.js','level-state.js']];for(const p of pages){const s=scriptsOf(fs.readFileSync(path.join(dist,p),'utf8'));for(const [later,first]of order)if(s.includes(later))assert.ok(s.indexOf(first)>=0&&s.indexOf(first)<s.indexOf(later),`${p}: ${first} must load before ${later}`);}});
-test('pages that play French audio load the shared audio module first',()=>{for(const p of pages){const h=fs.readFileSync(path.join(dist,p),'utf8'),scripts=scriptsOf(h);const code=h+scripts.filter(s=>!s.startsWith('vendor/')).map(s=>fs.readFileSync(local(s),'utf8')).join('\n');if(!/VocaFrenchAudio\./.test(code))continue;assert.ok(scripts.includes('french-audio.js'),p+' uses VocaFrenchAudio but never loads french-audio.js');assert.ok(h.indexOf('french-audio.js')<h.search(/<script>|<script[^>]*\ssrc="(?!\/?french-audio)/),p+' must load french-audio.js before its other scripts');}});
-test('every JavaScript file compiles and every JSON file parses',()=>{for(const p of pages)assert.match(fs.readFileSync(path.join(dist,p),'utf8'),/<script type="module" crossorigin src="\/app\/[^"]+\.js"><\/script>/,p+' is not a built React page');for(const f of files(dist)){if(f.endsWith('.js')&&!bundled(f))assert.doesNotThrow(()=>new vm.Script(fs.readFileSync(f,'utf8'),{filename:f}),f);if(f.endsWith('.json'))assert.doesNotThrow(()=>JSON.parse(fs.readFileSync(f,'utf8')),f);}for(const f of ['vercel.json','package.json','content/realm-course-source.json'])JSON.parse(fs.readFileSync(f,'utf8'));});
-test('editable course source and the published course file contain identical packs',()=>{const c={window:{}};vm.runInNewContext(fs.readFileSync('dist/realm-courses.js','utf8'),c);assert.deepEqual(JSON.parse(JSON.stringify(c.window.VocaRealmCourses)),JSON.parse(fs.readFileSync('content/realm-course-source.json','utf8')));});
-test('catalogue lists twenty unique realms, each with a lesson pack or the Hotel app',()=>{const cat=JSON.parse(fs.readFileSync('web/src/realms/catalogue.json','utf8')),c={window:{}};vm.runInNewContext(fs.readFileSync('dist/realm-courses.js','utf8'),c);assert.equal(cat.length,20);assert.equal(new Set(cat.map(r=>r.id)).size,20);for(const r of cat){assert.ok(r.name&&r.category&&r.description,r.id);assert.ok(r.id==='hotel'||c.window.VocaRealmCourses[r.id],r.id+' has no course pack');}});
-test('browser code contains no server secrets or private keys',()=>{const bad=[/service_role/i,/sb_secret_[A-Za-z0-9_-]{20,}/,/-----BEGIN [A-Z ]*PRIVATE KEY-----/,/\bsk-[A-Za-z0-9]{20,}/,/AZURE_SPEECH_KEY\s*[:=]\s*['"][^'"]+/,/Ocp-Apim-Subscription-Key/i];for(const f of files(dist).filter(f=>/\.(js|html|json|css)$/.test(f))){const t=fs.readFileSync(f,'utf8');for(const b of bad)assert.doesNotMatch(t,b,f);}const auth=fs.readFileSync('dist/auth-client.js','utf8');assert.match(auth,/sb_publishable_/);assert.doesNotMatch(auth,/eyJhbGciOi[^'"]*\.eyJ[^'"]*cm9sZSI6InNlcnZpY2Vfcm9sZS/);});
-test('account emails return to whichever domain the site is served from',()=>{const a=fs.readFileSync('web/src/accounts/actions.js','utf8');assert.match(a,/emailRedirectTo: origin \+ '\/auth-callback\.html'/);assert.match(a,/redirectTo: origin \+ '\/reset-password\.html'/);assert.match(fs.readFileSync('web/src/accounts/AccountPage.jsx','utf8'),/origin: location\.origin/);for(const f of files(dist).filter(f=>f.endsWith('.js')&&!f.includes('vendor')))assert.doesNotMatch(fs.readFileSync(f,'utf8'),/chatgpt\.site|vercel\.app|localhost:\d+/,f);});
-test('Vercel builds with Vite and publishes dist',()=>{const v=JSON.parse(fs.readFileSync('vercel.json','utf8'));assert.equal(v.outputDirectory,'dist');assert.equal(v.buildCommand,'npm run build');assert.match(JSON.parse(fs.readFileSync('package.json','utf8')).scripts.build,/vite build/);assert.ok(fs.existsSync('dist/index.html'));assert.ok(files(dist).reduce((n,f)=>n+fs.statSync(f).size,0)<100*1024*1024,'dist exceeds 100 MB');});
-test('local server serves pages with correct types and refuses paths outside dist',async()=>{const port=40000+Math.floor(Math.random()*20000),proc=spawn(process.execPath,['scripts/serve.mjs'],{env:{...process.env,PORT:String(port)},stdio:['ignore','pipe','pipe']});try{await new Promise((ok,fail)=>{proc.stdout.on('data',d=>/VocaRealm:/.test(d)&&ok());proc.on('exit',c=>fail(Error('server exited '+c)));setTimeout(()=>fail(Error('server did not start')),5000);});const get=(p,o)=>fetch(`http://127.0.0.1:${port}${p}`,o),raw=p=>new Promise((ok,fail)=>require('node:http').get({host:'127.0.0.1',port,path:p},r=>{r.resume();ok(r.statusCode);}).on('error',fail));
- let r=await get('/');assert.equal(r.status,200);assert.match(r.headers.get('content-type'),/text\/html/);assert.match(await r.text(),/VocaRealm/);
- for(const p of pages)assert.equal((await get('/'+p)).status,200,p);
- assert.match((await get('/welcome.css')).headers.get('content-type'),/text\/css/);assert.match((await get('/auth-client.js')).headers.get('content-type'),/javascript/);assert.equal((await get('/assets/vocarealm-logo.png')).headers.get('content-type'),'image/png');
- assert.equal((await get('/missing-page.html')).status,404);for(const p of ['/../package.json','/..%2fpackage.json','/assets/..%2f..%2fREADME.md'])assert.ok([403,404].includes(await raw(p)),p+' was served from outside dist');assert.equal((await get('/',{method:'POST'})).status,405);
- }finally{proc.kill();}});
+test('every page is a complete, mobile-ready English document', () => {
+  assert.ok(pages.length >= 15);
+  for (const p of pages) {
+    const h = fs.readFileSync(path.join(dist, p), 'utf8');
+    assert.match(h, /^<!doctype html>/i, p);
+    assert.match(h, /<html lang="en">/, p);
+    assert.match(h, /<meta charset="utf-8" ?\/?>/i, p);
+    assert.match(h, /name="viewport"/, p);
+    assert.match(h, /<title>[^<]*VocaRealm[^<]*<\/title>/, p);
+    assert.match(h, /rel="icon"/, p);
+  }
+});
+test('every local link, script, stylesheet and image on every page exists', () => {
+  const missing = [];
+  for (const p of pages) for (const r of refs(fs.readFileSync(path.join(dist, p), 'utf8'))) if (!fs.existsSync(local(r))) missing.push(p + ' → ' + r);
+  assert.deepEqual(missing, []);
+});
+test('every element id is unique within its page', () => {
+  for (const p of pages) {
+    const ids = [...fs.readFileSync(path.join(dist, p), 'utf8').matchAll(/\bid="([^"$]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(
+      ids.filter((id, i) => ids.indexOf(id) !== i),
+      [],
+      p,
+    );
+  }
+});
+test('scripts used by a page are loaded before code that depends on them', () => {
+  const order = [
+    ['auth-client.js', 'vendor/supabase-2.118.0.js'],
+    ['accounts.js', 'auth-client.js'],
+    ['account-navigation.js', 'learning-data.js'],
+    ['realm-catalogue.js', 'realm-courses.js'],
+    ['vocabulary-store.js', 'vocabulary-base.js'],
+    ['realm-learning.js', 'realm-learning-core.js'],
+    ['placement.js', 'level-core.js'],
+    ['levels.js', 'level-state.js'],
+  ];
+  for (const p of pages) {
+    const s = scriptsOf(fs.readFileSync(path.join(dist, p), 'utf8'));
+    for (const [later, first] of order)
+      if (s.includes(later)) assert.ok(s.indexOf(first) >= 0 && s.indexOf(first) < s.indexOf(later), `${p}: ${first} must load before ${later}`);
+  }
+});
+test('pages that play French audio load the shared audio module first', () => {
+  for (const p of pages) {
+    const h = fs.readFileSync(path.join(dist, p), 'utf8'),
+      scripts = scriptsOf(h);
+    const code =
+      h +
+      scripts
+        .filter((s) => !s.startsWith('vendor/'))
+        .map((s) => fs.readFileSync(local(s), 'utf8'))
+        .join('\n');
+    if (!/VocaFrenchAudio\./.test(code)) continue;
+    assert.ok(scripts.includes('french-audio.js'), p + ' uses VocaFrenchAudio but never loads french-audio.js');
+    assert.ok(
+      h.indexOf('french-audio.js') < h.search(/<script>|<script[^>]*\ssrc="(?!\/?french-audio)/),
+      p + ' must load french-audio.js before its other scripts',
+    );
+  }
+});
+test('every JavaScript file compiles and every JSON file parses', () => {
+  for (const p of pages)
+    assert.match(
+      fs.readFileSync(path.join(dist, p), 'utf8'),
+      /<script type="module" crossorigin src="\/app\/[^"]+\.js"><\/script>/,
+      p + ' is not a built React page',
+    );
+  for (const f of files(dist)) {
+    if (f.endsWith('.js') && !bundled(f)) assert.doesNotThrow(() => new vm.Script(fs.readFileSync(f, 'utf8'), { filename: f }), f);
+    if (f.endsWith('.json')) assert.doesNotThrow(() => JSON.parse(fs.readFileSync(f, 'utf8')), f);
+  }
+  for (const f of ['vercel.json', 'package.json', 'content/realm-course-source.json']) JSON.parse(fs.readFileSync(f, 'utf8'));
+});
+test('editable course source and the published course file contain identical packs', () => {
+  const c = { window: {} };
+  vm.runInNewContext(fs.readFileSync('dist/realm-courses.js', 'utf8'), c);
+  assert.deepEqual(JSON.parse(JSON.stringify(c.window.VocaRealmCourses)), JSON.parse(fs.readFileSync('content/realm-course-source.json', 'utf8')));
+});
+test('catalogue lists twenty unique realms, each with a lesson pack or the Hotel app', () => {
+  const cat = JSON.parse(fs.readFileSync('web/src/realms/catalogue.json', 'utf8')),
+    c = { window: {} };
+  vm.runInNewContext(fs.readFileSync('dist/realm-courses.js', 'utf8'), c);
+  assert.equal(cat.length, 20);
+  assert.equal(new Set(cat.map((r) => r.id)).size, 20);
+  for (const r of cat) {
+    assert.ok(r.name && r.category && r.description, r.id);
+    assert.ok(r.id === 'hotel' || c.window.VocaRealmCourses[r.id], r.id + ' has no course pack');
+  }
+});
+test('browser code contains no server secrets or private keys', () => {
+  const bad = [
+    /service_role/i,
+    /sb_secret_[A-Za-z0-9_-]{20,}/,
+    /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
+    /\bsk-[A-Za-z0-9]{20,}/,
+    /AZURE_SPEECH_KEY\s*[:=]\s*['"][^'"]+/,
+    /Ocp-Apim-Subscription-Key/i,
+  ];
+  for (const f of files(dist).filter((f) => /\.(js|html|json|css)$/.test(f))) {
+    const t = fs.readFileSync(f, 'utf8');
+    for (const b of bad) assert.doesNotMatch(t, b, f);
+  }
+  const auth = fs.readFileSync('dist/auth-client.js', 'utf8');
+  assert.match(auth, /sb_publishable_/);
+  assert.doesNotMatch(auth, /eyJhbGciOi[^'"]*\.eyJ[^'"]*cm9sZSI6InNlcnZpY2Vfcm9sZS/);
+});
+test('account emails return to whichever domain the site is served from', () => {
+  const a = fs.readFileSync('web/src/accounts/actions.js', 'utf8');
+  assert.match(a, /emailRedirectTo: origin \+ '\/auth-callback\.html'/);
+  assert.match(a, /redirectTo: origin \+ '\/reset-password\.html'/);
+  assert.match(fs.readFileSync('web/src/accounts/AccountPage.jsx', 'utf8'), /origin: location\.origin/);
+  for (const f of files(dist).filter((f) => f.endsWith('.js') && !f.includes('vendor')))
+    assert.doesNotMatch(fs.readFileSync(f, 'utf8'), /chatgpt\.site|vercel\.app|localhost:\d+/, f);
+});
+test('Vercel builds with Vite and publishes dist', () => {
+  const v = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
+  assert.equal(v.outputDirectory, 'dist');
+  assert.equal(v.buildCommand, 'npm run build');
+  assert.match(JSON.parse(fs.readFileSync('package.json', 'utf8')).scripts.build, /vite build/);
+  assert.ok(fs.existsSync('dist/index.html'));
+  assert.ok(files(dist).reduce((n, f) => n + fs.statSync(f).size, 0) < 100 * 1024 * 1024, 'dist exceeds 100 MB');
+});
+test('local server serves pages with correct types and refuses paths outside dist', async () => {
+  const port = 40000 + Math.floor(Math.random() * 20000),
+    proc = spawn(process.execPath, ['scripts/serve.mjs'], { env: { ...process.env, PORT: String(port) }, stdio: ['ignore', 'pipe', 'pipe'] });
+  try {
+    await new Promise((ok, fail) => {
+      proc.stdout.on('data', (d) => /VocaRealm:/.test(d) && ok());
+      proc.on('exit', (c) => fail(Error('server exited ' + c)));
+      setTimeout(() => fail(Error('server did not start')), 5000);
+    });
+    const get = (p, o) => fetch(`http://127.0.0.1:${port}${p}`, o),
+      raw = (p) =>
+        new Promise((ok, fail) =>
+          require('node:http')
+            .get({ host: '127.0.0.1', port, path: p }, (r) => {
+              r.resume();
+              ok(r.statusCode);
+            })
+            .on('error', fail),
+        );
+    let r = await get('/');
+    assert.equal(r.status, 200);
+    assert.match(r.headers.get('content-type'), /text\/html/);
+    assert.match(await r.text(), /VocaRealm/);
+    for (const p of pages) assert.equal((await get('/' + p)).status, 200, p);
+    assert.match((await get('/welcome.css')).headers.get('content-type'), /text\/css/);
+    assert.match((await get('/auth-client.js')).headers.get('content-type'), /javascript/);
+    assert.equal((await get('/assets/vocarealm-logo.png')).headers.get('content-type'), 'image/png');
+    assert.equal((await get('/missing-page.html')).status, 404);
+    for (const p of ['/../package.json', '/..%2fpackage.json', '/assets/..%2f..%2fREADME.md'])
+      assert.ok([403, 404].includes(await raw(p)), p + ' was served from outside dist');
+    assert.equal((await get('/', { method: 'POST' })).status, 405);
+  } finally {
+    proc.kill();
+  }
+});

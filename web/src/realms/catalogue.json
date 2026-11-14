@@ -159,16 +159,7 @@
     "description": "Meet people, chat and enjoy a gathering.",
     "image": null,
     "status": "starter",
-    "sample": [
-      "Salut ! Comment connais-tu notre hôte ?",
-      "Hi! How do you know our host?",
-      "une fête",
-      "a party",
-      "un invité",
-      "a guest",
-      "la musique",
-      "music"
-    ]
+    "sample": ["Salut ! Comment connais-tu notre hôte ?", "Hi! How do you know our host?", "une fête", "a party", "un invité", "a guest", "la musique", "music"]
   },
   {
     "id": "park",
@@ -177,16 +168,7 @@
     "description": "Talk about games, play and outdoor activities.",
     "image": null,
     "status": "starter",
-    "sample": [
-      "On joue au ballon ensemble ?",
-      "Shall we play ball together?",
-      "un parc",
-      "a park",
-      "un ballon",
-      "a ball",
-      "jouer",
-      "to play"
-    ]
+    "sample": ["On joue au ballon ensemble ?", "Shall we play ball together?", "un parc", "a park", "un ballon", "a ball", "jouer", "to play"]
   },
   {
     "id": "picnic",

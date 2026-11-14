@@ -50,8 +50,12 @@ export default function LevelPracticePage({ state }) {
           <p>
             {score}/3 correct. Revisit the text or choose another practice activity. Completing this sample does not establish that you have mastered {level}.
           </p>
-          <a className="btn blue" href={'levels.html?level=' + level}>Back to my learning path →</a>
-          <button className="btn" onClick={restart}>Practise again</button>
+          <a className="btn blue" href={'levels.html?level=' + level}>
+            Back to my learning path →
+          </a>
+          <button className="btn" onClick={restart}>
+            Practise again
+          </button>
         </section>
       </main>
     );
@@ -60,9 +64,13 @@ export default function LevelPracticePage({ state }) {
   return (
     <main>
       <section className="wrap section testwrap" id="practiceRoot">
-        <span className="eyebrow">{level} starter practice · {index + 1}/3</span>
+        <span className="eyebrow">
+          {level} starter practice · {index + 1}/3
+        </span>
         <h1>{pack.title}</h1>
-        <blockquote className="readingtext" lang="fr">{pack.text}</blockquote>
+        <blockquote className="readingtext" lang="fr">
+          {pack.text}
+        </blockquote>
         <h2>{q.prompt}</h2>
         <fieldset className="placementchoices" disabled={checked} key={index}>
           <legend className="sr-only">Answer choices</legend>

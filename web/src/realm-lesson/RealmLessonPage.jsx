@@ -109,13 +109,19 @@ export default function RealmLessonPage({ store }) {
           </div>
           <div className="lesson-tabs">
             {TABS.map((t) => (
-              <button key={t} type="button" onClick={() => open(t)}>{t}</button>
+              <button key={t} type="button" onClick={() => open(t)}>
+                {t}
+              </button>
             ))}
             <a href={'vocabulary.html?realm=' + realm}>Add my own words</a>
           </div>
           <section className="lesson-panel" key={visit}>
             {panels[tab]}
-            {feedback !== null && <p className="audio-feedback" role="status">{feedback}</p>}
+            {feedback !== null && (
+              <p className="audio-feedback" role="status">
+                {feedback}
+              </p>
+            )}
           </section>
         </section>
       </ShowEnglish.Provider>

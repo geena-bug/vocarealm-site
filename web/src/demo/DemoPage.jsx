@@ -82,8 +82,12 @@ export default function DemoPage() {
                 <span key={i} className={i <= step ? 'on' : ''} />
               ))}
             </div>
-            <span className="eyebrow" id="demoLabel">{s.label}</span>
-            <h2 id="demoTitle" ref={title} tabIndex={moved.current ? -1 : undefined}>{s.title}</h2>
+            <span className="eyebrow" id="demoLabel">
+              {s.label}
+            </span>
+            <h2 id="demoTitle" ref={title} tabIndex={moved.current ? -1 : undefined}>
+              {s.title}
+            </h2>
             <p id="demoInstruction">{s.instruction}</p>
             <button className="btn" id="listenDemo" type="button" onClick={() => speak(s.fr, setStatus, { rate: 0.85 })}>
               ▷ Listen to the French
@@ -95,7 +99,9 @@ export default function DemoPage() {
                 </button>
               ))}
             </div>
-            <p className="status" id="demoStatus" role="status">{status}</p>
+            <p className="status" id="demoStatus" role="status">
+              {status}
+            </p>
             <button
               className="btn blue"
               id="demoNext"
@@ -116,7 +122,9 @@ export default function DemoPage() {
           </section>
         </div>
         <div className="demofooter">
-          <button className="btn" id="restartDemo" type="button" onClick={() => goTo(0)}>↻ Restart demo</button>
+          <button className="btn" id="restartDemo" type="button" onClick={() => goTo(0)}>
+            ↻ Restart demo
+          </button>
           <span className="tiny">Illustrative walkthrough · Your demo answers do not change learning progress.</span>
         </div>
       </section>

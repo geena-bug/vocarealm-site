@@ -19,7 +19,9 @@ function RealmCard({ realm }) {
         <small className="catalogbadge">{realm.id === 'hotel' ? 'HOTEL PRACTICE' : courses()[realm.id].level + ' · 2 CONVERSATIONS'}</small>
         <h3>{realm.name}</h3>
         <p>{realm.description}</p>
-        <a className="btn" href={(realm.id === 'hotel' ? 'learn.html' : 'realm-learning.html') + '?realm=' + realm.id}>Start learning →</a>
+        <a className="btn" href={(realm.id === 'hotel' ? 'learn.html' : 'realm-learning.html') + '?realm=' + realm.id}>
+          Start learning →
+        </a>
       </div>
     </article>
   );
@@ -46,14 +48,23 @@ export default function RealmsPage() {
         </div>
         <section className="mini-path">
           <b>Looking for the right difficulty?</b>
-          <p>Realm practice ranges from everyday A1–A2 exchanges to B1–B2 discussions. A1–C2 starter reading practice and placement checks are available on your learning path.</p>
+          <p>
+            Realm practice ranges from everyday A1–A2 exchanges to B1–B2 discussions. A1–C2 starter reading practice and placement checks are available on your
+            learning path.
+          </p>
           <a href="levels.html">Choose a level →</a>
           <a href="placement.html">Take the placement check →</a>
         </section>
         <div className="catalogtools">
           <label htmlFor="realmSearch">
             Find your next situation
-            <input id="realmSearch" type="search" placeholder="Search shopping, wedding, interview…" value={search} onChange={(e) => setSearch(e.target.value)} />
+            <input
+              id="realmSearch"
+              type="search"
+              placeholder="Search shopping, wedding, interview…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </label>
           <label htmlFor="realmCategory">
             Category
@@ -64,7 +75,9 @@ export default function RealmsPage() {
             </select>
           </label>
         </div>
-        <p id="catalogCount" className="tiny" role="status">{shown.length} of 20 realms</p>
+        <p id="catalogCount" className="tiny" role="status">
+          {shown.length} of 20 realms
+        </p>
         <div className="cataloggrid" id="catalogGrid">
           {shown.map((r) => (
             <RealmCard key={r.id} realm={r} />
