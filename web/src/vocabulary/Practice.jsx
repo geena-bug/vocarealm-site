@@ -32,19 +32,20 @@ function record(store, word, correct, setStatus) {
 function Question({ word, index, total, pool, onAnswer, onNext }) {
   const C = core();
   const [choices] = useState(() =>
-    shuffle([
-      word.translation,
-      ...shuffle([...new Set(pool.map((x) => x.translation).filter((t) => C.norm(t) !== C.norm(word.translation)))]).slice(0, 3),
-    ]),
+    shuffle([word.translation, ...shuffle([...new Set(pool.map((x) => x.translation).filter((t) => C.norm(t) !== C.norm(word.translation)))]).slice(0, 3)]),
   );
   const [answer, setAnswer] = useState(null);
   const correct = answer === word.translation;
   return (
     <>
-      <span className="eyebrow">Word {index + 1} of {total}</span>
+      <span className="eyebrow">
+        Word {index + 1} of {total}
+      </span>
       <h2>{word.term}</h2>
       <p>Choose the meaning.</p>
-      <button type="button" className="btn" onClick={() => speak(word.term, () => {}, { rate: 0.82 })}>▷ Listen to word</button>
+      <button type="button" className="btn" onClick={() => speak(word.term, () => {}, { rate: 0.82 })}>
+        ▷ Listen to word
+      </button>
       <div className="choices">
         {choices.map((t) => (
           <button
@@ -65,7 +66,9 @@ function Question({ word, index, total, pool, onAnswer, onNext }) {
         {answer !== null && (correct ? 'Correct. ' : 'Not quite. ') + word.translation + (word.sentence ? ' · ' + word.sentence : '')}
       </p>
       {answer !== null && (
-        <button type="button" className="btn blue" onClick={onNext}>Next word →</button>
+        <button type="button" className="btn blue" onClick={onNext}>
+          Next word →
+        </button>
       )}
     </>
   );
@@ -96,13 +99,19 @@ export default function Practice({ quiz, pool, store, onClose, setStatus }) {
         onClose();
       }}
     >
-      <button id="closeVocabPractice" type="button" className="btn" onClick={() => dialog.current.close()}>Close ×</button>
-      <h2 id="vocabPracticeLabel" className="sr-only">Vocabulary practice</h2>
+      <button id="closeVocabPractice" type="button" className="btn" onClick={() => dialog.current.close()}>
+        Close ×
+      </button>
+      <h2 id="vocabPracticeLabel" className="sr-only">
+        Vocabulary practice
+      </h2>
       <div id="vocabPracticeBody">
         {quiz && !word && (
           <>
             <h2>Practice complete</h2>
-            <p>{score}/{quiz.length} correct. Revisit any words you want to hear again.</p>
+            <p>
+              {score}/{quiz.length} correct. Revisit any words you want to hear again.
+            </p>
           </>
         )}
         {word && (

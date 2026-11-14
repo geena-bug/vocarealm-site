@@ -11,8 +11,12 @@ function WatchConversationPanel({ app }) {
       <div className="eyebrow">WATCH A REAL CONVERSATION</div>
       <h2>Meet the receptionist and guest.</h2>
       <p className="muted">Follow a booking call or a normal check-in, with French audio, animated speaking turns and English translations.</p>
-      <button className="primary" onClick={() => app.openPlayer('checkin')}>▶ Watch check-in</button>{' '}
-      <button className="secondary" onClick={() => app.openPlayer('booking')}>☎ Watch booking</button>
+      <button className="primary" onClick={() => app.openPlayer('checkin')}>
+        ▶ Watch check-in
+      </button>{' '}
+      <button className="secondary" onClick={() => app.openPlayer('booking')}>
+        ☎ Watch booking
+      </button>
     </div>
   );
 }
@@ -25,7 +29,9 @@ export function Setup({ app, realm }) {
   return (
     <>
       <div className="workspace">
-        <button className="secondary" onClick={() => app.go('Realms')}>← All realms</button>
+        <button className="secondary" onClick={() => app.go('Realms')}>
+          ← All realms
+        </button>
         <div className="panel" style={{ padding: 0, overflow: 'hidden' }}>
           <div style={{ height: 210 }}>
             <SceneArt realm={realm} />
@@ -49,7 +55,9 @@ export function Setup({ app, realm }) {
                 </>
               )}
             </select>
-            {packLesson && <p className="muted">Your word bank can keep growing. Choose a manageable session; shorter sessions rotate through all available words.</p>}
+            {packLesson && (
+              <p className="muted">Your word bank can keep growing. Choose a manageable session; shorter sessions rotate through all available words.</p>
+            )}
             <p className="muted">French → English &nbsp; · &nbsp; {levelName(app.level)}</p>
             <button className="primary" onClick={() => (packLesson ? app.startPack(realm.id, length) : app.startStarter(realm.id, Number(length)))}>
               Enter the realm →
@@ -101,7 +109,9 @@ export function Question({ app, realm, lesson, q, label, progress }) {
   return (
     <div className="workspace">
       <div className="row">
-        <button className="secondary" onClick={app.leaveLesson}>← Leave lesson</button>
+        <button className="secondary" onClick={app.leaveLesson}>
+          ← Leave lesson
+        </button>
         <span className="muted">{label}</span>
       </div>
       <div className="track">
@@ -122,7 +132,9 @@ export function Question({ app, realm, lesson, q, label, progress }) {
             <h2 className="word">{q.prompt}</h2>
           )}
           <div style={{ textAlign: 'center' }}>
-            <button className="secondary" onClick={() => app.listen(q.prompt)}>♫ Listen</button>
+            <button className="secondary" onClick={() => app.listen(q.prompt)}>
+              ♫ Listen
+            </button>
           </div>
           <div className="options">
             {order.map((i) => (
@@ -132,20 +144,37 @@ export function Question({ app, realm, lesson, q, label, progress }) {
             ))}
           </div>
           <VoicePanel key={lesson.step} target={target} listen={app.listen} registerStatus={app.registerStatus} />
-          {packLesson && q.word && <p className="muted" style={{ fontSize: 12 }}>{q.scene} · {q.word.id}</p>}
+          {packLesson && q.word && (
+            <p className="muted" style={{ fontSize: 12 }}>
+              {q.scene} · {q.word.id}
+            </p>
+          )}
           <div className="scene-actions">
-            <span className="muted" style={{ fontSize: 12 }}>Watch the scene, then try the phrase.</span>
+            <span className="muted" style={{ fontSize: 12 }}>
+              Watch the scene, then try the phrase.
+            </span>
             <div>
-              <button className="secondary" onClick={() => setSceneRun(sceneRun + 1)}>↻ Replay action</button> <MotionToggle app={app} />
+              <button className="secondary" onClick={() => setSceneRun(sceneRun + 1)}>
+                ↻ Replay action
+              </button>{' '}
+              <MotionToggle app={app} />
             </div>
           </div>
           {realm.id === 'hotel' && q.type === 'Conversation' && (
-            <button className="secondary" onClick={() => app.openPlayer('checkin')}>▶ Watch the full check-in conversation</button>
+            <button className="secondary" onClick={() => app.openPlayer('checkin')}>
+              ▶ Watch the full check-in conversation
+            </button>
           )}
           <div id="feedback" aria-live="polite">
             {lesson.checked && <Feedback q={q} ok={lesson.lastOk} packLesson={packLesson} reviewing={lesson.reviewing} />}
           </div>
-          <button id="check" className="primary" disabled={lesson.selected < 0} onClick={app.check} style={{ width: '100%', opacity: lesson.selected < 0 ? 0.5 : 1 }}>
+          <button
+            id="check"
+            className="primary"
+            disabled={lesson.selected < 0}
+            onClick={app.check}
+            style={{ width: '100%', opacity: lesson.selected < 0 ? 0.5 : 1 }}
+          >
             {lesson.checked ? 'Continue →' : 'Check answer'}
           </button>
           <a
@@ -159,7 +188,9 @@ export function Question({ app, realm, lesson, q, label, progress }) {
           </a>
         </div>
       </div>
-      <p className="muted" style={{ textAlign: 'center', fontSize: 12 }}>Take your time. Mistakes are part of the journey.</p>
+      <p className="muted" style={{ textAlign: 'center', fontSize: 12 }}>
+        Take your time. Mistakes are part of the journey.
+      </p>
     </div>
   );
 }
@@ -171,15 +202,26 @@ export function PackResults({ app, realm, result }) {
       <div className="eyebrow">{realm.name.toUpperCase()} SESSION COMPLETE</div>
       <h1>You’ve put your words to use.</h1>
       <div className="row">
-        <div className="metric"><strong>{result.correct}/{result.baseTotal}</strong>First-attempt score</div>
-        <div className="metric"><strong>+{result.earned}</strong>XP earned</div>
+        <div className="metric">
+          <strong>
+            {result.correct}/{result.baseTotal}
+          </strong>
+          First-attempt score
+        </div>
+        <div className="metric">
+          <strong>+{result.earned}</strong>XP earned
+        </div>
       </div>
       <p>
-        Across the {realm.name} pack: {result.familiar} familiar · {result.mastered} mastered. Repeated success across activities builds familiarity; mastery also
-        needs a later review session.
+        Across the {realm.name} pack: {result.familiar} familiar · {result.mastered} mastered. Repeated success across activities builds familiarity; mastery
+        also needs a later review session.
       </p>
-      <button className="primary" onClick={() => (location.href = 'levels.html')}>View your next step →</button>{' '}
-      <button className="secondary" onClick={() => app.go('Realms')}>Explore realms</button>
+      <button className="primary" onClick={() => (location.href = 'levels.html')}>
+        View your next step →
+      </button>{' '}
+      <button className="secondary" onClick={() => app.go('Realms')}>
+        Explore realms
+      </button>
     </div>
   );
 }
@@ -195,16 +237,27 @@ export function StarterResults({ app, realm, lesson }) {
         <h1>More words. More confidence.</h1>
         <p className="muted">You’ve practised {realm.mission.toLowerCase().replace(/\.$/, '')}.</p>
         <div className="row">
-          <div className="metric"><strong>{score}/{order.length + 4}</strong>Correct answers</div>
-          <div className="metric"><strong>+{earned}</strong>XP earned</div>
+          <div className="metric">
+            <strong>
+              {score}/{order.length + 4}
+            </strong>
+            Correct answers
+          </div>
+          <div className="metric">
+            <strong>+{earned}</strong>XP earned
+          </div>
         </div>
         <p>{missed.length ? missed.length + ' word(s) could use another look.' : 'You’re ready to try another everyday moment.'}</p>
         {missed.length > 0 && (
           <>
-            <button className="secondary" onClick={app.reviewMissed}>Review missed words</button>{' '}
+            <button className="secondary" onClick={app.reviewMissed}>
+              Review missed words
+            </button>{' '}
           </>
         )}
-        <button className="primary" onClick={() => app.go('Realms')}>Explore another realm →</button>
+        <button className="primary" onClick={() => app.go('Realms')}>
+          Explore another realm →
+        </button>
         <p>
           <button onClick={() => app.go('Home')}>Back home</button>
         </p>
@@ -212,7 +265,9 @@ export function StarterResults({ app, realm, lesson }) {
       <div className="workspace panel">
         <h2>Your next step</h2>
         <p>Continue practising the five A2 scenarios. B1 lessons are not available yet.</p>
-        <button className="secondary" onClick={() => (location.href = 'levels.html')}>View learning path →</button>
+        <button className="secondary" onClick={() => (location.href = 'levels.html')}>
+          View learning path →
+        </button>
       </div>
     </>
   );

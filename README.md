@@ -6,17 +6,17 @@ Source commit: `bf15834d6980bec9f10e946ad93a2acbbd33385e`.
 
 The site is built with **React** and Vite. Every page is a React page; shared logic and content that several pages use (accounts, French audio, the word bank, saving vocabulary, level rules, lesson content and conversation-review storage) remain plain JavaScript files that each page loads before its React code.
 
-| Page | React code |
-| --- | --- |
-| Home, Demo | `web/src/home/`, `web/src/demo/` |
-| Log in, Sign up, Forgot/Reset password, email confirmation | `web/src/accounts/`, `web/src/auth-callback/` |
-| Explore realms | `web/src/realms/` |
-| Realm lessons (19 packs) | `web/src/realm-lesson/` |
-| Hotel app (`learn.html`) | `web/src/hotel/` |
-| Vocabulary | `web/src/vocabulary/` |
-| Levels, Placement, Level practice | `web/src/levels/` |
-| Read-aloud practice | `web/src/pronunciation/` |
-| Shared components (conversation review, English toggle, recorder) | `web/src/shared/` |
+| Page                                                              | React code                                    |
+| ----------------------------------------------------------------- | --------------------------------------------- |
+| Home, Demo                                                        | `web/src/home/`, `web/src/demo/`              |
+| Log in, Sign up, Forgot/Reset password, email confirmation        | `web/src/accounts/`, `web/src/auth-callback/` |
+| Explore realms                                                    | `web/src/realms/`                             |
+| Realm lessons (19 packs)                                          | `web/src/realm-lesson/`                       |
+| Hotel app (`learn.html`)                                          | `web/src/hotel/`                              |
+| Vocabulary                                                        | `web/src/vocabulary/`                         |
+| Levels, Placement, Level practice                                 | `web/src/levels/`                             |
+| Read-aloud practice                                               | `web/src/pronunciation/`                      |
+| Shared components (conversation review, English toggle, recorder) | `web/src/shared/`                             |
 
 Each page is `web/<page>.html` (head, and for most pages the site navigation and footer) plus `web/src/<page>/`. To add a page, create `web/<name>.html` with `<div id="root"></div>` and a module script pointing at its React entry; Vite picks up every `web/*.html` automatically.
 
@@ -53,19 +53,19 @@ The live site is https://vocarealm.vercel.app (the original Sites copy remains a
 
 ## Useful entry points
 
-| What you want to change | File |
-| --- | --- |
-| Landing page | `web/src/home/HomePage.jsx`, `web/public/welcome.css` |
-| Realm catalogue | `web/src/realms/RealmsPage.jsx`, `web/src/realms/catalogue.json` |
-| Non-Hotel lessons and conversations | `web/src/realm-lesson/`, `web/public/realm-courses.js` |
+| What you want to change                                | File                                                                                              |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| Landing page                                           | `web/src/home/HomePage.jsx`, `web/public/welcome.css`                                             |
+| Realm catalogue                                        | `web/src/realms/RealmsPage.jsx`, `web/src/realms/catalogue.json`                                  |
+| Non-Hotel lessons and conversations                    | `web/src/realm-lesson/`, `web/public/realm-courses.js`                                            |
 | Hotel lessons, conversation player and video role-play | `web/src/hotel/` (content in `data.js`, rules in `lesson.js`, player in `ConversationPlayer.jsx`) |
-| Vocabulary page | `web/src/vocabulary/` |
-| Word bank and saving personal vocabulary | `web/public/vocabulary-base.js`, `web/public/vocabulary-store.js` |
-| Translate a word into the vocabulary form | `web/src/vocabulary/translate.js`, `integrations/translation/` |
-| French audio playback | `web/public/french-audio.js` |
-| Conversation recordings and correction review | `web/src/shared/ConversationReview.jsx`, `web/public/conversation-review.js` (storage) |
-| Level pathway and placement | `web/src/levels/`, `web/public/level-content.js`, `web/public/level-core.js` |
-| Login and signup | `web/src/accounts/`, `web/public/auth-client.js` |
+| Vocabulary page                                        | `web/src/vocabulary/`                                                                             |
+| Word bank and saving personal vocabulary               | `web/public/vocabulary-base.js`, `web/public/vocabulary-store.js`                                 |
+| Translate a word into the vocabulary form              | `web/src/vocabulary/translate.js`, `integrations/translation/`                                    |
+| French audio playback                                  | `web/public/french-audio.js`                                                                      |
+| Conversation recordings and correction review          | `web/src/shared/ConversationReview.jsx`, `web/public/conversation-review.js` (storage)            |
+| Level pathway and placement                            | `web/src/levels/`, `web/public/level-content.js`, `web/public/level-core.js`                      |
+| Login and signup                                       | `web/src/accounts/`, `web/public/auth-client.js`                                                  |
 
 ## Accounts and backend configuration
 

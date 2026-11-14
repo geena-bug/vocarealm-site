@@ -1,0 +1,10 @@
+dist/
+.vercel/
+node_modules/
+e2e-report/
+e2e-results/
+package-lock.json
+SOURCE-MANIFEST.json
+content/
+# Legacy classic scripts: kept byte-identical until they become modules.
+web/public/

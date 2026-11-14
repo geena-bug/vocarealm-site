@@ -28,8 +28,12 @@ export default function AuthCallbackPage() {
   return (
     <main className="wrap section">
       <h1>Welcome to VocaRealm.</h1>
-      <p id="callbackStatus" role="status">{status}</p>
-      <a className="btn blue" href="login.html">Go to login</a>
+      <p id="callbackStatus" role="status">
+        {status}
+      </p>
+      <a className="btn blue" href="login.html">
+        Go to login
+      </a>
     </main>
   );
 }

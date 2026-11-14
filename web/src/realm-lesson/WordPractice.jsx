@@ -38,7 +38,9 @@ function Question({ q, number, total, review, words, speak, onAnswered, onNext }
       <English>{q.fill ? 'Which word completes the sentence?' : 'Listen to the word, then select it.'}</English>
       {q.fill && <p lang="fr">{w.fillPrompt}</p>}
       <English>{q.fill ? w.sentenceTranslation : w.translation}</English>
-      <button type="button" onClick={() => speak(q.fill ? w.sentence : w.term)}>Listen</button>
+      <button type="button" onClick={() => speak(q.fill ? w.sentence : w.term)}>
+        Listen
+      </button>
       <div className="answers">
         {options.map((option) => (
           <button
@@ -60,7 +62,9 @@ function Question({ q, number, total, review, words, speak, onAnswered, onNext }
           <English>{w.translation}</English>
           <p lang="fr">{w.sentence}</p>
           <English>{w.sentenceTranslation}</English>
-          <button type="button" onClick={onNext}>Next</button>
+          <button type="button" onClick={onNext}>
+            Next
+          </button>
         </>
       )}
     </>
@@ -110,7 +114,9 @@ export default function WordPractice({ realm, words, progress, save, speak }) {
           <option value="10">10 words</option>
           <option value="all">All {words.length} words</option>
         </select>
-        <button type="button" onClick={start}>Start practice</button>
+        <button type="button" onClick={start}>
+          Start practice
+        </button>
       </div>
       <p>Short sessions rotate through your word bank. Personal words tagged to this realm are included.</p>
       <div>

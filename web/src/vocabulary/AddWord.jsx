@@ -25,7 +25,7 @@ export const emptyWord = (realm) => ({ term: '', meaning: '', example: '', examp
 
 // The "Add a word you discovered" panel: translation direction, Translate, word-bank matches and the editable form.
 // `editing` holds the record being edited from the word list; the parent owns saving.
-export default function AddWord({ store, defaultRealm, editing, onCancelEdit, onSave, setStatus }) {
+export default function AddWord({ store, defaultRealm, editing, onCancelEdit, onSave }) {
   const [direction, setDirection] = useState('en-fr');
   const [query, setQuery] = useState('');
   const [notice, setNotice] = useState('');
@@ -159,7 +159,10 @@ export default function AddWord({ store, defaultRealm, editing, onCancelEdit, on
     const saved = await onSave(editing ? { ...word, id: editing.id } : word);
     setSaving(false);
     if (!saved) return;
-    savePending(pending.filter((x) => normalize(x) !== normalize(word.meaning)), 'Could not update the saved word list.');
+    savePending(
+      pending.filter((x) => normalize(x) !== normalize(word.meaning)),
+      'Could not update the saved word list.',
+    );
     setWord(emptyWord(defaultRealm));
     setNote('');
   }
@@ -179,7 +182,9 @@ export default function AddWord({ store, defaultRealm, editing, onCancelEdit, on
       </div>
 
       <section id="englishLookupPanel">
-        <label id="entryLabel" htmlFor="englishWord">{d.label}</label>
+        <label id="entryLabel" htmlFor="englishWord">
+          {d.label}
+        </label>
         <div className="actions">
           <input
             id="englishWord"
@@ -207,8 +212,12 @@ export default function AddWord({ store, defaultRealm, editing, onCancelEdit, on
             Translate
           </button>
         </div>
-        <p id="entryHint" className="tiny">{d.hint}</p>
-        <p id="englishLookupStatus" className="status" role="status">{notice}</p>
+        <p id="entryHint" className="tiny">
+          {d.hint}
+        </p>
+        <p id="englishLookupStatus" className="status" role="status">
+          {notice}
+        </p>
         <div id="englishMatches" className="wordgrid">
           {result?.matches.length > 0 && <h3>{result.heading}</h3>}
           {result?.matches.map((w) => (
@@ -217,9 +226,13 @@ export default function AddWord({ store, defaultRealm, editing, onCancelEdit, on
               <h3 lang="fr">{w.term}</h3>
               <p>{w.translation || w.meaning}</p>
               {(w.sentence || w.example) && <p lang="fr">{w.sentence || w.example}</p>}
-              <button type="button" className="btn" onClick={() => speak(w.term, setNotice)}>Listen to word</button>
+              <button type="button" className="btn" onClick={() => speak(w.term, setNotice)}>
+                Listen to word
+              </button>
               {(w.sentence || w.example) && (
-                <button type="button" className="btn" onClick={() => speak(w.sentence || w.example, setNotice)}>Listen to sentence</button>
+                <button type="button" className="btn" onClick={() => speak(w.sentence || w.example, setNotice)}>
+                  Listen to sentence
+                </button>
               )}
               <button
                 type="button"
@@ -244,7 +257,13 @@ export default function AddWord({ store, defaultRealm, editing, onCancelEdit, on
                 className="btn"
                 target="_blank"
                 rel="noopener noreferrer"
-                href={'https://translate.google.com/?sl=' + (direction === 'en-fr' ? 'en&tl=fr' : 'fr&tl=en') + '&text=' + encodeURIComponent(result.alternativesFor) + '&op=translate'}
+                href={
+                  'https://translate.google.com/?sl=' +
+                  (direction === 'en-fr' ? 'en&tl=fr' : 'fr&tl=en') +
+                  '&text=' +
+                  encodeURIComponent(result.alternativesFor) +
+                  '&op=translate'
+                }
               >
                 Look up in Google Translate ↗
               </a>
@@ -288,7 +307,12 @@ export default function AddWord({ store, defaultRealm, editing, onCancelEdit, on
                 <button
                   type="button"
                   className="btn"
-                  onClick={() => savePending(pending.filter((x) => x !== text), 'Could not remove the saved word. Browser storage is unavailable.')}
+                  onClick={() =>
+                    savePending(
+                      pending.filter((x) => x !== text),
+                      'Could not remove the saved word. Browser storage is unavailable.',
+                    )
+                  }
                 >
                   Remove
                 </button>
@@ -313,13 +337,21 @@ export default function AddWord({ store, defaultRealm, editing, onCancelEdit, on
         </label>
         <label>
           Example translation <span className="tiny">optional</span>
-          <textarea name="example_translation" maxLength={500} placeholder="I forgot my umbrella." value={word.example_translation} onChange={set('example_translation')} />
+          <textarea
+            name="example_translation"
+            maxLength={500}
+            placeholder="I forgot my umbrella."
+            value={word.example_translation}
+            onChange={set('example_translation')}
+          />
         </label>
         <label>
           Realm
           <select id="wordRealm" name="realm" value={word.realm} onChange={set('realm')}>
             {realms().map((r) => (
-              <option key={r.id} value={r.id}>{r.name}</option>
+              <option key={r.id} value={r.id}>
+                {r.name}
+              </option>
             ))}
           </select>
         </label>
@@ -340,7 +372,9 @@ export default function AddWord({ store, defaultRealm, editing, onCancelEdit, on
             ▷ Listen to sentence
           </button>
         </div>
-        <p id="translationNote" className="tiny wide" role="note" hidden={!note}>{note}</p>
+        <p id="translationNote" className="tiny wide" role="note" hidden={!note}>
+          {note}
+        </p>
         <label className="wide">
           Where did you find it? <span className="tiny">optional</span>
           <input name="encounter" maxLength={500} placeholder="A conversation, a sign, a book…" value={word.encounter} onChange={set('encounter')} />

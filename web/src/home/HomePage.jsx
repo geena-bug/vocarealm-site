@@ -7,7 +7,11 @@ const featuredRealms = [
 ];
 
 const steps = [
-  ['01 / LEARN IT', 'Meet the useful words', 'Choose a short session or explore all the words available in a growing A1 pack. Listen, match meanings and practise sentences.'],
+  [
+    '01 / LEARN IT',
+    'Meet the useful words',
+    'Choose a short session or explore all the words available in a growing A1 pack. Listen, match meanings and practise sentences.',
+  ],
   ['02 / SEE IT', 'Watch the situation unfold', 'Follow illustrated scenes and French dialogue, with English support when you need it.'],
   ['03 / USE IT', 'Take your turn', 'Choose either role in a guided conversation. Record a reply, listen back and send when you’re ready.'],
 ];
@@ -21,8 +25,12 @@ export default function HomePage() {
           <h1>Your next French conversation starts here.</h1>
           <p>Step into everyday worlds. Learn the words, hear them in context, then take your turn in the conversation.</p>
           <div className="actions">
-            <a className="btn blue" href="signup.html">Start your journey ↗</a>
-            <a className="btn" href="demo.html">▷ See how it works</a>
+            <a className="btn blue" href="signup.html">
+              Start your journey ↗
+            </a>
+            <a className="btn" href="demo.html">
+              ▷ See how it works
+            </a>
           </div>
           <p className="tiny">French with English support · A1–C2 learning pathway</p>
         </div>
@@ -42,7 +50,9 @@ export default function HomePage() {
             <h2>Find your French starting point.</h2>
             <p>Explore A1 to C2, or take a short written placement check. You can skip familiar foundations and practise at a level that fits.</p>
           </div>
-          <a className="btn blue" href="placement.html">Find my level →</a>
+          <a className="btn blue" href="placement.html">
+            Find my level →
+          </a>
         </div>
       </section>
 
@@ -52,8 +62,7 @@ export default function HomePage() {
             <span className="eyebrow">Learn in the places life happens</span>
             <h2>
               A world of familiar situations.
-              <br />
-              A reason to use every word.
+              <br />A reason to use every word.
             </h2>
             <p>
               From shopping and directions to celebrations, work and news, discover French for the moments that matter. Explore vocabulary, bilingual
@@ -72,7 +81,9 @@ export default function HomePage() {
             ))}
           </div>
           <div className="actions">
-            <a className="btn blue" href="realms.html">Explore all 20 realms →</a>
+            <a className="btn blue" href="realms.html">
+              Explore all 20 realms →
+            </a>
           </div>
         </div>
       </section>
@@ -98,7 +109,9 @@ export default function HomePage() {
           <h2>You don’t need the perfect words to begin.</h2>
           <p>Use a hint, hear a model line, slow down the audio or type your response. The conversation waits for you.</p>
           <p className="tiny">Conversations follow a guided script. Pronunciation scoring is planned; recording and replay are available now.</p>
-          <a className="btn" href="demo.html">Try the interactive demo →</a>
+          <a className="btn" href="demo.html">
+            Try the interactive demo →
+          </a>
         </div>
       </section>
 
@@ -112,7 +125,9 @@ export default function HomePage() {
               alongside your learning.
             </p>
           </div>
-          <a className="btn blue" href="vocabulary.html">Build my vocabulary →</a>
+          <a className="btn blue" href="vocabulary.html">
+            Build my vocabulary →
+          </a>
         </div>
       </section>
 
@@ -122,7 +137,9 @@ export default function HomePage() {
             <h2>Make your first French check-in.</h2>
             <p>Try a short walkthrough, then explore at your own pace.</p>
           </div>
-          <a className="btn" href="demo.html">Let’s try it →</a>
+          <a className="btn" href="demo.html">
+            Let’s try it →
+          </a>
         </div>
       </section>
     </main>

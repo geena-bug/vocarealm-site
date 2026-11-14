@@ -44,7 +44,9 @@ function Art({ mode }) {
       <img src="/assets/hotel-conversation-v2.png" alt="A conversation at the hotel" />
       <h2>Every conversation opens a door.</h2>
       <p>Explore everyday situations, build your French and practise at your pace.</p>
-      <a className="btn" href="realms.html">Explore the realms →</a>
+      <a className="btn" href="realms.html">
+        Explore the realms →
+      </a>
     </div>
   );
 }
@@ -145,7 +147,16 @@ export default function AccountPage({ mode }) {
             {mode !== 'reset' && (
               <>
                 <label htmlFor="email">Email address</label>
-                <input id="email" name="email" type="email" autoComplete="email" placeholder="you@example.com" required value={fields.email} onChange={set('email')} />
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  required
+                  value={fields.email}
+                  onChange={set('email')}
+                />
               </>
             )}
             {mode !== 'forgot' && (
@@ -176,7 +187,12 @@ export default function AccountPage({ mode }) {
                 />
               </>
             )}
-            <p id="accountStatus" className={mode === 'login' || mode === 'signup' ? 'notice' : undefined} role="status" style={{ color: status.error ? '#b42318' : '#22624f' }}>
+            <p
+              id="accountStatus"
+              className={mode === 'login' || mode === 'signup' ? 'notice' : undefined}
+              role="status"
+              style={{ color: status.error ? '#b42318' : '#22624f' }}
+            >
               {status.message}
             </p>
             <button type="submit" className="btn blue" disabled={busy} aria-describedby="accountStatus">
@@ -185,13 +201,27 @@ export default function AccountPage({ mode }) {
           </form>
           {mode === 'login' && (
             <>
-              <p className="tiny">New here? <a href="signup.html"><u>Create an account</u></a></p>
-              <p><a href="forgot-password.html"><u>Forgot password?</u></a></p>
+              <p className="tiny">
+                New here?{' '}
+                <a href="signup.html">
+                  <u>Create an account</u>
+                </a>
+              </p>
+              <p>
+                <a href="forgot-password.html">
+                  <u>Forgot password?</u>
+                </a>
+              </p>
             </>
           )}
           {mode === 'signup' && (
             <>
-              <p className="tiny">Already have an account? <a href="login.html"><u>Log in</u></a></p>
+              <p className="tiny">
+                Already have an account?{' '}
+                <a href="login.html">
+                  <u>Log in</u>
+                </a>
+              </p>
               <p className="tiny">Pilot registration: verification emails are currently limited while our public email service is being configured.</p>
             </>
           )}
@@ -207,7 +237,9 @@ export default function AccountPage({ mode }) {
           )}
           {(mode === 'login' || mode === 'signup') && (
             <>
-              <a className="btn" href="demo.html">Try the demo</a>
+              <a className="btn" href="demo.html">
+                Try the demo
+              </a>
               <p className="tiny">{PRIVACY}</p>
             </>
           )}

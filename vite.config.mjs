@@ -7,7 +7,9 @@ import react from '@vitejs/plugin-react';
 // Each web/*.html is a React page and is built into dist/ under the same name.
 const root = resolve(import.meta.dirname, 'web');
 const pages = Object.fromEntries(
-  readdirSync(root).filter((f) => f.endsWith('.html')).map((f) => [f.replace(/\.html$/, ''), resolve(root, f)]),
+  readdirSync(root)
+    .filter((f) => f.endsWith('.html'))
+    .map((f) => [f.replace(/\.html$/, ''), resolve(root, f)]),
 );
 
 export default defineConfig({

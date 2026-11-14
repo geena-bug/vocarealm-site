@@ -13,7 +13,16 @@ function allWords(store) {
     ...bank,
     ...store.items.map((w) =>
       C.exerciseWord(
-        { ...w, id: 'user_' + w.id, recordId: w.id, translation: w.meaning, sentence: w.example, sentenceTranslation: w.example_translation, scenarioId: w.realm, source: 'personal' },
+        {
+          ...w,
+          id: 'user_' + w.id,
+          recordId: w.id,
+          translation: w.meaning,
+          sentence: w.example,
+          sentenceTranslation: w.example_translation,
+          scenarioId: w.realm,
+          source: 'personal',
+        },
         bank,
       ),
     ),
@@ -28,20 +37,32 @@ function WordCard({ word, onEdit, onRemove, setStatus }) {
       <span className="catalogbadge">{SOURCE_LABEL[word.source] || 'COURSE WORD'}</span>
       <h3 lang="fr">{word.term}</h3>
       <p>{word.translation}</p>
-      {word.sentence && <p className="tiny" lang="fr">{word.sentence}</p>}
+      {word.sentence && (
+        <p className="tiny" lang="fr">
+          {word.sentence}
+        </p>
+      )}
       <small className="tiny">{(realm?.name || word.realm) + (word.level ? ' · ' + word.level : '')}</small>
       <div className="wordactions">
-        <button className="btn" onClick={() => say(word.term)}>▷ Listen to word</button>
+        <button className="btn" onClick={() => say(word.term)}>
+          ▷ Listen to word
+        </button>
         {word.sentence && (
           <button type="button" className="btn" aria-label={'Listen to sentence: ' + word.sentence} onClick={() => say(word.sentence)}>
             ▷ Listen to sentence
           </button>
         )}
-        <a className="btn" href={'pronunciation.html?text=' + encodeURIComponent(word.sentence || word.term)}>Read aloud</a>
+        <a className="btn" href={'pronunciation.html?text=' + encodeURIComponent(word.sentence || word.term)}>
+          Read aloud
+        </a>
         {word.source === 'personal' && (
           <>
-            <button className="btn" onClick={() => onEdit(word.recordId)}>Edit</button>
-            <button className="btn" onClick={() => onRemove(word)}>Remove</button>
+            <button className="btn" onClick={() => onEdit(word.recordId)}>
+              Edit
+            </button>
+            <button className="btn" onClick={() => onRemove(word)}>
+              Remove
+            </button>
           </>
         )}
       </div>
@@ -64,6 +85,8 @@ export default function VocabularyPage({ store }) {
 
   useStopSpeakingOnLeave();
 
+  // `store` mutates in place; `version` is bumped after each change to recompute.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const words = useMemo(() => allWords(store), [store, version]);
   const shown = useMemo(() => {
     const term = C.norm(search);
@@ -115,15 +138,10 @@ export default function VocabularyPage({ store }) {
           </p>
         </div>
 
-        <AddWord
-          store={store}
-          defaultRealm={defaultRealm}
-          editing={editing}
-          onCancelEdit={() => setEditing(null)}
-          onSave={save}
-          setStatus={setStatus}
-        />
-        <p id="wordStatus" className="status" role="status">{status}</p>
+        <AddWord store={store} defaultRealm={defaultRealm} editing={editing} onCancelEdit={() => setEditing(null)} onSave={save} />
+        <p id="wordStatus" className="status" role="status">
+          {status}
+        </p>
 
         <div className="vocabtools">
           <label>
@@ -135,7 +153,9 @@ export default function VocabularyPage({ store }) {
             <select id="vocabRealm" value={realmFilter} onChange={(e) => setRealmFilter(e.target.value)}>
               <option value="">All realms</option>
               {realms().map((r) => (
-                <option key={r.id} value={r.id}>{r.name}</option>
+                <option key={r.id} value={r.id}>
+                  {r.name}
+                </option>
               ))}
             </select>
           </label>

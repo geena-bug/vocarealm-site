@@ -22,14 +22,18 @@ export default function LevelsPage({ state }) {
         <div className="sectionhead">
           <span className="eyebrow">Your French learning path</span>
           <h1>Start where you belong.</h1>
-          <p>Choose a level from A1 to C2, or take a written placement check to find a useful starting point. You can revisit earlier levels whenever you want.</p>
+          <p>
+            Choose a level from A1 to C2, or take a written placement check to find a useful starting point. You can revisit earlier levels whenever you want.
+          </p>
         </div>
         <section className="placementpromo">
           <div>
             <h2>Already know some French?</h2>
             <p>Check your foundations and move on to harder questions. Six questions per stage, up to 36 in total. No timer.</p>
           </div>
-          <a className="btn blue" href="placement.html">Find my starting level →</a>
+          <a className="btn blue" href="placement.html">
+            Find my starting level →
+          </a>
         </section>
         {state.data.result && codes.includes(state.data.result.recommended) && (
           <p className="tiny">
@@ -50,25 +54,41 @@ export default function LevelsPage({ state }) {
           ))}
         </div>
         <section className="selectedlevel">
-          <span className="eyebrow">{selected} / {level.name}</span>
+          <span className="eyebrow">
+            {selected} / {level.name}
+          </span>
           <h2>{level.title}</h2>
           <p>
             {selected === 'A1'
               ? 'Start a full A1 pack in one of five realms, or try a short reading activity.'
-              : 'Try an original short reading with three practice questions. Full ' + selected + ' courses and speaking assessments are still being developed.'}
+              : 'Try an original short reading with three practice questions. Full ' +
+                selected +
+                ' courses and speaking assessments are still being developed.'}
           </p>
-          <a className="btn blue" href={'level-practice.html?level=' + selected}>Start {selected} practice →</a>
-          {selected === 'A1' && <a className="btn" href="realms.html">Explore full A1 realm packs</a>}
-          {selected === 'A2' && <a className="btn" href="learn.html?realm=hotel&course=A2">Try an A2 Hotel scenario</a>}
+          <a className="btn blue" href={'level-practice.html?level=' + selected}>
+            Start {selected} practice →
+          </a>
+          {selected === 'A1' && (
+            <a className="btn" href="realms.html">
+              Explore full A1 realm packs
+            </a>
+          )}
+          {selected === 'A2' && (
+            <a className="btn" href="learn.html?realm=hotel&course=A2">
+              Try an A2 Hotel scenario
+            </a>
+          )}
         </section>
         <p className="tiny">
-          The placement check covers selected reading, grammar and written interaction skills. Its questions and thresholds are provisional, not a validated CEFR
-          exam. It does not assess speaking, listening or extended writing.
+          The placement check covers selected reading, grammar and written interaction skills. Its questions and thresholds are provisional, not a validated
+          CEFR exam. It does not assess speaking, listening or extended writing.
         </p>
         <a className="tiny" href="https://www.coe.int/en/web/common-european-framework-reference-languages/level-descriptions" target="_blank" rel="noopener">
           About the CEFR levels ↗
         </a>
-        <p className="status" id="levelChoiceStatus" role="status">{status}</p>
+        <p className="status" id="levelChoiceStatus" role="status">
+          {status}
+        </p>
       </section>
     </main>
   );
