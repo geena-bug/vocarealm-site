@@ -259,6 +259,50 @@ p {
   padding: 5px 9px;
   font-weight: 700;
 }
+.lines {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 22px;
+  flex-shrink: 0;
+}
+.lines span {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: #2563eb;
+}
+.lines span:nth-child(2) {
+  width: 70%;
+  opacity: 0.7;
+}
+.lines span:nth-child(3) {
+  width: 40%;
+  opacity: 0.45;
+}
+.stats .pill {
+  display: inline-flex;
+  align-items: center;
+}
+.lines-sm {
+  width: 12px;
+  gap: 2px;
+  margin-right: 7px;
+}
+.lines-sm span {
+  height: 2px;
+}
+.lines-lg {
+  width: 56px;
+  gap: 7px;
+  margin: 6px auto 18px;
+  display: flex;
+}
+.lines-lg span {
+  height: 5px;
+  border-radius: 3px;
+}
 .tip {
   background: #eef6f4;
   border: 1px solid #dcebe6;
@@ -266,6 +310,7 @@ p {
   padding: 20px;
   margin-top: 25px;
   display: flex;
+  align-items: center;
   gap: 15px;
   font-size: 13px;
 }

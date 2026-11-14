@@ -760,7 +760,7 @@ test.describe('Hotel app in depth', () => {
     expect(d.attempts.length).toBe(total + 2);
     expect(Object.keys(d.vocabularyProgress)).toHaveLength(5);
     expect(Object.values(d.vocabularyProgress).every((p) => ['learning', 'familiar', 'needs_review', 'mastered'].includes(p.state))).toBe(true);
-    await expect(page.locator('#xp')).toHaveText('✦ ' + d.xp + ' XP');
+    await expect(page.locator('#xp')).toHaveText(d.xp + ' XP');
     await page
       .locator('#nav')
       .getByRole('button', { name: /Progress/ })
@@ -797,7 +797,7 @@ test.describe('Hotel app in depth', () => {
     await page.getByRole('button', { name: 'Reset learning progress' }).click();
     await expect(page.getByRole('heading', { name: 'A little practice. A world of possibility.' })).toBeVisible();
     expect((await page.evaluate(() => JSON.parse(localStorage.getItem('vocarealm-v1')))).xp).toBe(0);
-    await expect(page.locator('#xp')).toHaveText('✦ 0 XP');
+    await expect(page.locator('#xp')).toHaveText('0 XP');
   });
   test('an A2 starter lesson runs words, challenge and dialog, then offers a missed-word review', async ({ page }) => {
     await page.goto('learn.html?realm=hotel&course=A2');

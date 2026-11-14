@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { rotatedOrder } from './lesson.js';
-import { MotionToggle, SceneArt } from './screens.jsx';
+import { Lines, MotionToggle, SceneArt } from './screens.jsx';
 import VoicePanel from './VoicePanel.jsx';
 
 const levelName = (level) => level + ' ' + (level === 'A1' ? 'Beginner' : 'Elementary');
@@ -232,7 +232,7 @@ export function StarterResults({ app, realm, lesson }) {
   return (
     <>
       <div className="workspace panel empty">
-        <div style={{ fontSize: 50 }}>✧</div>
+        <Lines size="lg" />
         <div className="eyebrow">{reviewing ? 'REVIEW COMPLETE' : 'REALM COMPLETE'}</div>
         <h1>More words. More confidence.</h1>
         <p className="muted">You’ve practised {realm.mission.toLowerCase().replace(/\.$/, '')}.</p>

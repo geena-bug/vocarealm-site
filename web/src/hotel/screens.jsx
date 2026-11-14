@@ -14,6 +14,17 @@ export function SceneArt({ realm }) {
   );
 }
 
+// Brand accent: three stacked lines of decreasing length, like lines of dialogue. Decorative only.
+export function Lines({ size = 'md' }) {
+  return (
+    <span className={'lines lines-' + size} aria-hidden="true">
+      <span />
+      <span />
+      <span />
+    </span>
+  );
+}
+
 export function MotionToggle({ app }) {
   return (
     <button data-motion-toggle className="secondary" aria-pressed={app.motionPaused} onClick={app.toggleMotion}>
@@ -142,7 +153,7 @@ export function Home({ app }) {
         ))}
       </div>
       <div className="tip">
-        <span style={{ fontSize: 24 }}>✧</span>
+        <Lines />
         <div>
           <b>Build confidence, one conversation at a time.</b>
           <br />
