@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import { English } from '../shared/English.jsx';
 import { useRecorder } from '../shared/useRecorder.js';
 
@@ -9,12 +9,15 @@ const nextIndex = (...args) => window.RealmLearningCore.next(...args);
 
 function PartnerTurn({ line, roleName, watching, speak, onContinue }) {
   const [status, setStatus] = useState('Listen, then continue when ready.');
+  // Each turn is mounted once (keyed by line), so it speaks once with the props it was given.
+  const playTurn = useEffectEvent((onDone) => {
+    speak(line.fr, line.actor, () => watching && onDone());
+    if (!window.speechSynthesis && watching) setStatus('Audio unavailable. Use Continue to read each turn.');
+  });
+  const advance = useEffectEvent(() => onContinue());
   useEffect(() => {
     let timer;
-    speak(line.fr, line.actor, () => {
-      if (watching) timer = setTimeout(onContinue, 700);
-    });
-    if (!window.speechSynthesis && watching) setStatus('Audio unavailable. Use Continue to read each turn.');
+    playTurn(() => (timer = setTimeout(advance, 700)));
     return () => clearTimeout(timer);
   }, []);
   return (

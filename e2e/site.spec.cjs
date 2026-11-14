@@ -217,7 +217,7 @@ test.describe('vocabulary',()=>{
     expect(await page.locator('#wordForm [name=term]').evaluate(i=>i.validity.valueMissing)).toBe(true);
   });
   test('Cancel editing only appears while editing a saved word',async({page})=>{
-    const posts=await translationService(page);
+    await translationService(page);
     await page.locator('#englishWord').fill('umbrella');
     await page.getByRole('button',{name:'Translate'}).click();
     await expect(page.locator('#wordForm [name=term]')).toHaveValue('un parapluie');

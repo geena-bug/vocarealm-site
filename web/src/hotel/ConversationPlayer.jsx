@@ -794,7 +794,7 @@ export default function ConversationPlayer({ app, kind, onClose }) {
       c.shutdown();
       c.mounted = false;
     };
-  }, []);
+  }, [c]);
 
   const conversation = hotelConversations[s.kind];
   const l = conversation.lines[s.index];

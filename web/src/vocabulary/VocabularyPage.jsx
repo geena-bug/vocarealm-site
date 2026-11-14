@@ -64,6 +64,8 @@ export default function VocabularyPage({ store }) {
 
   useStopSpeakingOnLeave();
 
+  // `store` mutates in place; `version` is bumped after each change to recompute.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const words = useMemo(() => allWords(store), [store, version]);
   const shown = useMemo(() => {
     const term = C.norm(search);
@@ -121,7 +123,6 @@ export default function VocabularyPage({ store }) {
           editing={editing}
           onCancelEdit={() => setEditing(null)}
           onSave={save}
-          setStatus={setStatus}
         />
         <p id="wordStatus" className="status" role="status">{status}</p>
 

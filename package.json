@@ -10,14 +10,23 @@
     "start": "vite",
     "build": "vite build",
     "preview": "npm run build && node scripts/serve.mjs",
+    "lint": "eslint . --max-warnings 86",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "vite build --logLevel warn && node --test tests/*.test.cjs",
     "test:e2e": "playwright test --config playwright.config.cjs",
     "test:all": "npm test && npm run test:e2e",
-    "test:live": "BASE_URL=https://vocarealm.vercel.app playwright test --config playwright.config.cjs"
+    "test:live": "BASE_URL=https://vocarealm.vercel.app playwright test --config playwright.config.cjs",
+    "check": "npm run lint && npm run format:check && npm test"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@playwright/test": "1.54.2",
     "@vitejs/plugin-react": "6.1.2",
+    "eslint": "10.15.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.14.0",
+    "prettier": "3.10.1",
     "vite": "8.3.3"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
 
 const normalize = (t) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
@@ -17,11 +17,14 @@ export default function VoicePanel({ target, listen, registerStatus }) {
   const [clip, setClip] = useState(null);
   const live = useRef({ recognizer: null, recorder: null, stream: null, timer: null });
 
+  // `registerStatus` comes from a fresh app object each render; only the mount/unmount calls matter.
+  const register = useEffectEvent((fn) => registerStatus(fn));
+
   useEffect(() => {
-    registerStatus(setStatus);
+    register(setStatus);
     const l = live.current;
     return () => {
-      registerStatus(null);
+      register(null);
       l.recognizer?.abort();
       if (l.recorder?.state === 'recording') {
         l.recorder.onstop = null;

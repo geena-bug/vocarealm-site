@@ -25,7 +25,7 @@ export const emptyWord = (realm) => ({ term: '', meaning: '', example: '', examp
 
 // The "Add a word you discovered" panel: translation direction, Translate, word-bank matches and the editable form.
 // `editing` holds the record being edited from the word list; the parent owns saving.
-export default function AddWord({ store, defaultRealm, editing, onCancelEdit, onSave, setStatus }) {
+export default function AddWord({ store, defaultRealm, editing, onCancelEdit, onSave }) {
   const [direction, setDirection] = useState('en-fr');
   const [query, setQuery] = useState('');
   const [notice, setNotice] = useState('');
